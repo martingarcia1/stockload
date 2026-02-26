@@ -20,12 +20,12 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="inventario">
-            <Route index element={<StockList />} />
+            <Route index element={<StockList key="todas" />} />
             <Route path="nuevo" element={<StockForm />} />
             <Route path="editar/:id" element={<StockForm />} />
           </Route>
-          <Route path="relojes" element={<ComingSoon title="Stock de Relojes" />} />
-          <Route path="joyas" element={<ComingSoon title="Stock de Joyas" />} />
+          <Route path="relojes" element={<StockList key="relojes" defaultCategory="Relojes" />} />
+          <Route path="joyas" element={<StockList key="joyas" defaultCategory="Joyas" />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

@@ -13,11 +13,16 @@ const CategoryIcon = ({ category }) => {
     }
 };
 
-const StockList = () => {
+const StockList = ({ defaultCategory = 'Todas' }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    // Filter states
+    const [showFilters, setShowFilters] = useState(false);
+    const [categoryFilter, setCategoryFilter] = useState(defaultCategory);
+    const [stockFilter, setStockFilter] = useState('Todos');
 
     useEffect(() => {
         const fetchStock = async () => {
@@ -51,18 +56,46 @@ const StockList = () => {
         }
     };
 
-    const filteredItems = items.filter(item =>
-        item.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.marca?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredItems = items.filter(item => {
+        const matchesSearch = item.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.marca?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesCategory = categoryFilter === 'Todas' || item.categoria === categoryFilter;
+
+        let matchesStock = true;
+        if (stockFilter === 'Bajo') {
+            matchesStock = item.stock <= item.minStock;
+        } else if (stockFilter === 'Óptimo') {
+            matchesStock = item.stock > item.minStock;
+        }
+
+        return matchesSearch && matchesCategory && matchesStock;
+    });
+
+    // Cierra el panel de filtros si se hace click fuera (opcional, pero mejora la UX)
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (showFilters && !event.target.closest('.filters-container')) {
+                setShowFilters(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showFilters]);
 
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-display font-bold text-jewelry-light tracking-tight">Inventario Global</h2>
-                    <p className="text-jewelry-light/60 mt-1">Gestión de stock de relojes, joyas y platería.</p>
+                    <h2 className="text-3xl font-display font-bold text-jewelry-light tracking-tight">
+                        {defaultCategory === 'Todas' ? 'Inventario Global' : `Inventario de ${defaultCategory}`}
+                    </h2>
+                    <p className="text-jewelry-light/60 mt-1">
+                        {defaultCategory === 'Todas'
+                            ? 'Gestión de stock de relojes, joyas y platería.'
+                            : `Gestión y control de la categoría de ${defaultCategory.toLowerCase()}.`}
+                    </p>
                 </div>
                 <Button variant="primary" className="flex items-center gap-2" onClick={() => navigate('/inventario/nuevo')}>
                     <Plus size={18} />
@@ -83,10 +116,64 @@ const StockList = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <Button variant="outline" className="flex items-center gap-2 whitespace-nowrap">
-                        <Filter size={18} />
-                        Filtros
-                    </Button>
+                    <div className="relative filters-container">
+                        <Button
+                            variant={showFilters ? "primary" : "outline"}
+                            className="flex items-center gap-2 whitespace-nowrap"
+                            onClick={() => setShowFilters(!showFilters)}
+                        >
+                            <Filter size={18} />
+                            Filtros {(categoryFilter !== 'Todas' || stockFilter !== 'Todos') && <span className="ml-1 w-2 h-2 rounded-full bg-jewelry-gold"></span>}
+                        </Button>
+
+                        {showFilters && (
+                            <div className="absolute right-0 top-full mt-2 w-64 bg-jewelry-darker border border-jewelry-gray/50 rounded-lg shadow-xl p-4 z-10">
+                                <h3 className="text-sm font-medium text-jewelry-light mb-3">Filtrar Inventario</h3>
+
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs text-jewelry-light/70 mb-1 leading-relaxed">Categoría</label>
+                                        <select
+                                            value={categoryFilter}
+                                            onChange={(e) => setCategoryFilter(e.target.value)}
+                                            className="w-full bg-jewelry-gray/20 border border-jewelry-gray/50 rounded-md text-sm text-jewelry-light px-2 py-1.5 focus:outline-none focus:border-jewelry-gold"
+                                        >
+                                            <option value="Todas">Todas las categorías</option>
+                                            <option value="Relojes">Relojes</option>
+                                            <option value="Joyas">Joyas</option>
+                                            <option value="Platería">Platería</option>
+                                            <option value="General">General</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs text-jewelry-light/70 mb-1 leading-relaxed">Estado de Stock</label>
+                                        <select
+                                            value={stockFilter}
+                                            onChange={(e) => setStockFilter(e.target.value)}
+                                            className="w-full bg-jewelry-gray/20 border border-jewelry-gray/50 rounded-md text-sm text-jewelry-light px-2 py-1.5 focus:outline-none focus:border-jewelry-gold"
+                                        >
+                                            <option value="Todos">Todos</option>
+                                            <option value="Óptimo">Stock Óptimo</option>
+                                            <option value="Bajo">Stock Bajo</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="pt-2 flex justify-end">
+                                        <button
+                                            onClick={() => {
+                                                setCategoryFilter('Todas');
+                                                setStockFilter('Todos');
+                                            }}
+                                            className="text-xs text-jewelry-light/50 hover:text-jewelry-gold transition-colors"
+                                        >
+                                            Limpiar filtros
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className="overflow-x-auto">
