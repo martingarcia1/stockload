@@ -140,6 +140,19 @@ const EgresoForm = () => {
                                         }))}
                                         isSearchable
                                         isClearable
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                const searchTerm = e.target.value;
+                                                if (searchTerm) {
+                                                    // Buscamos coincidencia exacta de SKU
+                                                    const match = items.find(i => i.sku && i.sku.toLowerCase() === searchTerm.toLowerCase());
+                                                    if (match) {
+                                                        e.preventDefault();
+                                                        setItemId(match.id);
+                                                    }
+                                                }
+                                            }
+                                        }}
                                         styles={{
                                             control: (base, state) => ({
                                                 ...base,

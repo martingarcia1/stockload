@@ -4,6 +4,7 @@ import { Card, CardContent } from '../components/Card';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { ArrowLeft, Loader2, Save, AlertTriangle, ImagePlus, X } from 'lucide-react';
+import Barcode from 'react-barcode';
 import { apiFetch } from '../utils/api';
 
 const StockForm = () => {
@@ -60,6 +61,12 @@ const StockForm = () => {
                 }
             };
             fetchItem();
+        } else {
+            // Auto-generar un SKU temporario sugerido basándonos en marca temporal para artículos nuevos
+            if (!formData.sku) {
+                const preGeneratedSku = `SKU-${Date.now().toString().slice(-6)}`;
+                setFormData(prev => ({ ...prev, sku: preGeneratedSku }));
+            }
         }
     }, [id, isEditMode]);
 
@@ -81,6 +88,63 @@ const StockForm = () => {
         setImageFile(null);
         setPreviewUrl('');
         setFormData(prev => ({ ...prev, urlImagen: '' }));
+    };
+
+    const handlePrintBarcode = () => {
+        const barcodeContainer = document.getElementById('barcode-container');
+        if (!barcodeContainer) return;
+
+        const svgElement = barcodeContainer.innerHTML;
+        // Dimensiones típicas de papel térmico de etiquetas (aprox. 58mm o similar)
+        const printWindow = window.open('', '_blank', 'width=400,height=300');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Imprimir Código - ${formData.nombre || formData.sku}</title>
+                    <style>
+                        @media print {
+                            @page { margin: 0; size: auto; }
+                            body { margin: 0.5cm; }
+                        }
+                        body { 
+                            margin: 0.5cm;
+                            display: flex; 
+                            flex-direction: column;
+                            align-items: center; 
+                            font-family: sans-serif;
+                        }
+                        .product-name {
+                            font-size: 12px;
+                            font-weight: bold;
+                            margin-bottom: 5px;
+                            text-align: center;
+                            max-width: 100%;
+                            word-wrap: break-word;
+                        }
+                        .price {
+                            font-size: 14px;
+                            font-weight: bold;
+                            margin-top: 5px;
+                        }
+                        svg { 
+                            max-width: 100%; 
+                            height: auto; 
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="product-name">${formData.nombre || 'Sin nombre'}</div>
+                    ${svgElement}
+                    <div class="price">$${formData.precio?.toLocaleString('es-AR') || '0'}</div>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 300);
     };
 
     const handleSubmit = async (e) => {
@@ -224,14 +288,40 @@ const StockForm = () => {
                             />
                         </div>
 
-                        <Input
-                            label="SKU (Código único)"
-                            name="sku"
-                            value={formData.sku}
-                            onChange={handleChange}
-                            placeholder="Ej. TS-0092"
-                            required
-                        />
+                        <div className="flex flex-col gap-2">
+                            <Input
+                                label="SKU (Código único)"
+                                name="sku"
+                                value={formData.sku}
+                                onChange={handleChange}
+                                placeholder="Ej. TS-0092"
+                                required
+                            />
+                            {formData.sku && (
+                                <div className="mt-1 flex flex-col items-center w-full max-w-xs transition-all">
+                                    <div className="p-3 bg-white border border-jewelry-gray/50 rounded-t-lg flex items-center justify-center w-full shadow-inner overflow-hidden">
+                                        <div id="barcode-container" className="w-full flex justify-center">
+                                            <Barcode
+                                                value={formData.sku}
+                                                width={1.5}
+                                                height={50}
+                                                fontSize={14}
+                                                background="#ffffff"
+                                                lineColor="#000000"
+                                                margin={0}
+                                            />
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={handlePrintBarcode}
+                                        className="w-full text-xs font-medium text-jewelry-gold bg-jewelry-gold/10 hover:bg-jewelry-gold/20 px-3 py-2 rounded-b-lg transition-colors border-b border-x border-jewelry-gold/30 flex items-center justify-center"
+                                    >
+                                        IMPRIMIR ETIQUETA
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
                         <Input
                             label="Marca"
