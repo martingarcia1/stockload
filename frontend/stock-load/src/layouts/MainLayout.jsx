@@ -1,13 +1,23 @@
 import React from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
-import { LayoutDashboard, Package, Tag, Watch, UserCircle, LogOut } from 'lucide-react';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, Tag, Watch, UserCircle, LogOut, ShoppingCart } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Sidebar = () => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
     const navItems = [
         { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
         { name: 'Inventario', icon: Package, path: '/inventario' },
         { name: 'Relojes', icon: Watch, path: '/relojes' },
         { name: 'Joyas', icon: Tag, path: '/joyas' },
+        { name: 'Ventas y Egresos', icon: ShoppingCart, path: '/egresos' },
     ];
 
     return (
@@ -40,7 +50,10 @@ const Sidebar = () => {
             </nav>
 
             <div className="p-4 border-t border-jewelry-gray">
-                <button className="flex w-full items-center space-x-3 px-4 py-3 text-jewelry-light hover:bg-red-500/10 hover:text-red-500 rounded-lg transition-colors">
+                <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center space-x-3 px-4 py-3 text-jewelry-light hover:bg-red-500/10 hover:text-red-500 rounded-lg transition-colors"
+                >
                     <LogOut size={20} />
                     <span className="font-medium">Salir</span>
                 </button>

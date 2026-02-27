@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../components/Card';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { Search, Filter, Plus, Edit2, Trash2, Watch, Diamond, PackageOpen, Loader2 } from 'lucide-react';
+import { Search, Filter, Plus, Edit2, Trash2, Watch, Diamond, PackageOpen, Loader2, Download, FileText, FileSpreadsheet, ImagePlus } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
+import { apiFetch } from '../utils/api';
 
 const CategoryIcon = ({ category }) => {
     switch (category) {
@@ -27,7 +32,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
     useEffect(() => {
         const fetchStock = async () => {
             try {
-                const response = await fetch('http://localhost:5202/api/stock');
+                const response = await apiFetch('http://localhost:5202/api/stock');
                 if (response.ok) {
                     const data = await response.json();
                     setItems(data);
@@ -44,7 +49,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Está seguro de eliminar este artículo?')) {
             try {
-                const response = await fetch(`http://localhost:5202/api/stock/${id}`, {
+                const response = await apiFetch(`http://localhost:5202/api/stock/${id}`, {
                     method: 'DELETE'
                 });
                 if (response.ok) {
@@ -73,6 +78,60 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
         return matchesSearch && matchesCategory && matchesStock;
     });
 
+    const handleExportExcel = () => {
+        const dataToExport = filteredItems.map(item => ({
+            'ID': item.id,
+            'Nombre': item.nombre || 'Sin nombre',
+            'SKU': item.sku || 'N/A',
+            'Marca': item.marca || 'S/M',
+            'Categoría': item.categoria || 'General',
+            'Precio': item.precio || 0,
+            'Stock Actual': item.stock || 0,
+            'Stock Mínimo': item.minStock || 0
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(dataToExport);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Inventario");
+        XLSX.writeFile(wb, `Inventario_${defaultCategory}_${new Date().toLocaleDateString('es-AR').replace(/\//g, '-')}.xlsx`);
+    };
+
+    const handleExportPDF = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text(`Reporte de Inventario - ${defaultCategory}`, 14, 22);
+
+        doc.setFontSize(11);
+        doc.setTextColor(100);
+        doc.text(`Generado el: ${new Date().toLocaleString('es-AR')}`, 14, 30);
+
+        const tableColumn = ["ID", "Producto", "SKU", "Categoría", "Precio ($)", "Stock"];
+        const tableRows = [];
+
+        filteredItems.forEach(item => {
+            const rowData = [
+                item.id,
+                item.nombre || 'Sin nombre',
+                item.sku || 'N/A',
+                item.categoria || 'General',
+                item.precio?.toLocaleString('es-AR') || '0',
+                `${item.stock || 0} / ${item.minStock || 0} mín.`
+            ];
+            tableRows.push(rowData);
+        });
+
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 40,
+            theme: 'grid',
+            headStyles: { fillColor: [24, 24, 27] } // Matches jewelry-darker
+        });
+
+        doc.save(`Inventario_${defaultCategory}_${new Date().toLocaleDateString('es-AR').replace(/\//g, '-')}.pdf`);
+    };
+
     // Cierra el panel de filtros si se hace click fuera (opcional, pero mejora la UX)
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -97,10 +156,20 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                             : `Gestión y control de la categoría de ${defaultCategory.toLowerCase()}.`}
                     </p>
                 </div>
-                <Button variant="primary" className="flex items-center gap-2" onClick={() => navigate('/inventario/nuevo')}>
-                    <Plus size={18} />
-                    Nuevo Artículo
-                </Button>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <Button variant="outline" className="flex items-center gap-2 hover:border-green-500/50 hover:bg-green-500/10 transition-colors" onClick={handleExportExcel} title="Exportar a Excel">
+                        <FileSpreadsheet size={18} className="text-green-500" />
+                        <span className="hidden sm:inline">Excel</span>
+                    </Button>
+                    <Button variant="outline" className="flex items-center gap-2 hover:border-red-500/50 hover:bg-red-500/10 transition-colors" onClick={handleExportPDF} title="Exportar a PDF">
+                        <FileText size={18} className="text-red-400" />
+                        <span className="hidden sm:inline">PDF</span>
+                    </Button>
+                    <Button variant="primary" className="flex items-center gap-2" onClick={() => navigate('/inventario/nuevo')}>
+                        <Plus size={18} />
+                        Nuevo
+                    </Button>
+                </div>
             </div>
 
             <Card>
@@ -185,6 +254,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                         <table className="w-full text-sm text-left">
                             <thead className="text-xs text-jewelry-light/70 uppercase bg-jewelry-darker border-b border-jewelry-gray">
                                 <tr>
+                                    <th className="px-6 py-4 font-medium w-16 text-center">Img</th>
                                     <th className="px-6 py-4 font-medium">Producto</th>
                                     <th className="px-6 py-4 font-medium">Categoría</th>
                                     <th className="px-6 py-4 font-medium text-right">Precio</th>
@@ -196,6 +266,19 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                             <tbody>
                                 {filteredItems.map((item) => (
                                     <tr key={item.id} className="border-b border-jewelry-gray/50 hover:bg-jewelry-gray/20 transition-colors">
+                                        <td className="px-6 py-4">
+                                            {item.urlImagen ? (
+                                                <img
+                                                    src={item.urlImagen}
+                                                    alt={item.nombre}
+                                                    className="w-12 h-12 min-w-[3rem] object-cover rounded-md border border-jewelry-gray"
+                                                />
+                                            ) : (
+                                                <div className="w-12 h-12 min-w-[3rem] rounded-md bg-jewelry-gray/30 flex items-center justify-center text-jewelry-light/40 border border-jewelry-gray/50">
+                                                    <ImagePlus size={18} />
+                                                </div>
+                                            )}
+                                        </td>
                                         <td className="px-6 py-4">
                                             <div className="font-medium text-jewelry-light">{item.nombre || 'Sin nombre'}</div>
                                             <div className="text-xs text-jewelry-light/50 flex items-center gap-2 mt-1">

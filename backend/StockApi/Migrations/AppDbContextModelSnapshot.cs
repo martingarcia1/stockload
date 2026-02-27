@@ -22,6 +22,37 @@ namespace StockApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("StockApi.Models.Egreso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int")
+                        .HasColumnName("cantidad");
+
+                    b.Property<DateTime>("FechaEgreso")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fechaEgreso");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int")
+                        .HasColumnName("itemId");
+
+                    b.Property<string>("Motivo")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("motivo");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Egresos");
+                });
+
             modelBuilder.Entity("StockApi.Models.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -85,6 +116,44 @@ namespace StockApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Producto", (string)null);
+                });
+
+            modelBuilder.Entity("StockApi.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Egreso", b =>
+                {
+                    b.HasOne("StockApi.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
                 });
 #pragma warning restore 612, 618
         }

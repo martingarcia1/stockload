@@ -18,14 +18,21 @@ const StatCard = ({ title, value, icon: Icon, description, trend, trendColor = '
     </Card>
 );
 
+import { apiFetch } from '../utils/api';
+
 const Dashboard = () => {
-    const [stats, setStats] = useState(null);
+    const [stats, setStats] = useState({
+        totalItems: 0,
+        categorias: { Relojes: 0, Joyas: 0 },
+        alertasStock: 0,
+        ultimosAgregados: []
+    });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await fetch('http://localhost:5202/api/stock/stats');
+                const response = await apiFetch('http://localhost:5202/api/stock/stats');
                 if (response.ok) {
                     const data = await response.json();
                     setStats(data);

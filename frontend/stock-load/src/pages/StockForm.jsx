@@ -3,71 +3,120 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent } from '../components/Card';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Save, AlertTriangle, ImagePlus, X } from 'lucide-react';
+import { apiFetch } from '../utils/api';
 
 const StockForm = () => {
-    const navigate = useNavigate();
     const { id } = useParams();
-    const isEditMode = Boolean(id);
+    const navigate = useNavigate();
+    const isEditMode = !!id;
 
     const [formData, setFormData] = useState({
-        nombre: '',
         sku: '',
-        categoria: 'Relojes',
+        nombre: '',
         marca: '',
+        categoria: 'Relojes',
         precio: '',
         stock: '',
-        minStock: ''
+        minStock: '',
+        urlImagen: ''
     });
+
+    const [imageFile, setImageFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState('');
 
     const [loading, setLoading] = useState(isEditMode);
     const [saving, setSaving] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (isEditMode) {
             const fetchItem = async () => {
                 try {
-                    const response = await fetch(`http://localhost:5202/api/stock/${id}`);
+                    const response = await apiFetch(`http://localhost:5202/api/stock/${id}`);
                     if (response.ok) {
                         const data = await response.json();
                         setFormData({
-                            nombre: data.nombre || '',
                             sku: data.sku || '',
-                            categoria: data.categoria || 'Relojes',
+                            nombre: data.nombre || '',
                             marca: data.marca || '',
+                            categoria: data.categoria || 'Relojes',
                             precio: data.precio || '',
                             stock: data.stock || '',
-                            minStock: data.minStock || ''
+                            minStock: data.minStock || '',
+                            urlImagen: data.urlImagen || ''
                         });
+                        if (data.urlImagen) {
+                            setPreviewUrl(data.urlImagen);
+                        }
                     } else {
-                        navigate('/inventario');
+                        setError('Item no encontrado o error en el servidor');
                     }
-                } catch (error) {
-                    console.error("Error fetching item:", error);
-                    navigate('/inventario');
+                } catch (err) {
+                    setError('Error de conexión al cargar el item');
+                    console.error("Fetch error:", err);
                 } finally {
                     setLoading(false);
                 }
             };
             fetchItem();
         }
-    }, [id, navigate, isEditMode]);
+    }, [id, isEditMode]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
+            const objectUrl = URL.createObjectURL(file);
+            setPreviewUrl(objectUrl);
+        }
+    };
+
+    const removeImage = () => {
+        setImageFile(null);
+        setPreviewUrl('');
+        setFormData(prev => ({ ...prev, urlImagen: '' }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
+        setError('');
 
         try {
+            let finalImageUrl = formData.urlImagen;
+
+            if (imageFile) {
+                const formDataImage = new FormData();
+                formDataImage.append('file', imageFile);
+
+                const uploadResponse = await apiFetch('http://localhost:5202/api/upload', {
+                    method: 'POST',
+                    body: formDataImage,
+                    // No configurar 'Content-Type': 'application/json' cuando se usa FormData
+                });
+
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    finalImageUrl = uploadData.url;
+                } else {
+                    setError('Error al subir la imagen al servidor');
+                    setSaving(false);
+                    return;
+                }
+            }
+
             const payload = {
                 ...formData,
                 precio: Number(formData.precio),
                 stock: Number(formData.stock),
-                minStock: Number(formData.minStock)
+                minStock: Number(formData.minStock),
+                urlImagen: finalImageUrl
             };
 
             if (isEditMode) {
@@ -80,7 +129,7 @@ const StockForm = () => {
 
             const method = isEditMode ? 'PUT' : 'POST';
 
-            const response = await fetch(url, {
+            const response = await apiFetch(url, {
                 method,
                 headers: {
                     'Content-Type': 'application/json'
@@ -128,6 +177,41 @@ const StockForm = () => {
             <Card>
                 <form onSubmit={handleSubmit}>
                     <CardContent className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <div className="col-span-1 md:col-span-2 flex flex-col items-center mb-2">
+                            <label className="block text-sm font-medium leading-6 text-jewelry-light mb-3">
+                                Imagen del Producto
+                            </label>
+
+                            <div className="relative w-48 h-48 border-2 border-dashed border-jewelry-gray/60 rounded-xl overflow-hidden flex items-center justify-center bg-jewelry-darker hover:border-jewelry-gold transition-colors">
+                                {previewUrl ? (
+                                    <>
+                                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                                        <button
+                                            type="button"
+                                            onClick={removeImage}
+                                            className="absolute top-2 right-2 bg-red-500/90 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg"
+                                            title="Eliminar imagen"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer text-jewelry-light/40 hover:text-jewelry-gold transition-colors">
+                                        <ImagePlus size={36} className="mb-3" />
+                                        <span className="text-sm font-medium">Subir Imagen</span>
+                                        <span className="text-xs mt-1 text-center px-4">Toca aquí para seleccionar o usar la cámara</span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            capture="environment"
+                                            className="hidden"
+                                            onChange={handleImageChange}
+                                        />
+                                    </label>
+                                )}
+                            </div>
+                        </div>
 
                         <div className="col-span-1 md:col-span-2">
                             <Input

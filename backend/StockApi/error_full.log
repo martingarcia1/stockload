@@ -1,0 +1,34 @@
+﻿Usando la configuración de inicio de D:\app carga de stock\backend\StockApi\Properties\launchSettings.json...
+Compilando...
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 1 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 2 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 3 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 4 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 5 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 6 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 7 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 8 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 9 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): warning MSB3026: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se iniciará el reintento 10 dentro de 1000ms. The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): error MSB3027: No se pudo copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". Se superó el número de 10 reintentos. Error. El archivo se ha bloqueado por: "StockApi (532)" [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+C:\Program Files\dotnet\sdk\10.0.101\Microsoft.Common.CurrentVersion.targets(5381,5): error MSB3021: No se puede copiar "D:\app carga de stock\backend\StockApi\obj\Debug\net10.0\apphost.exe" en "bin\Debug\net10.0\StockApi.exe". The process cannot access the file 'D:\app carga de stock\backend\StockApi\bin\Debug\net10.0\StockApi.exe' because it is being used by another process. [D:\app carga de stock\backend\StockApi\StockApi.csproj]
+dotnet : 
+En línea: 1 Carácter: 1
++ dotnet run 2>&1 | 
+Out-File -FilePath 
+error_full.log 
+-Encoding utf8
++ ~~~~~~~~~~~~~~~
+    + CategoryInfo      
+        : NotSpecified  
+  : (:String) [], Rem   
+ oteException
+    + FullyQualifiedErr 
+   orId : NativeComman  
+  dError
+ 
+No se pudo llevar a 
+cabo la compilación. 
+Corrija los errores de 
+compilación y vuelva a 
+ejecutar el proyecto.
