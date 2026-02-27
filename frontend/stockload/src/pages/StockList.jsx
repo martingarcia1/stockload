@@ -283,7 +283,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                         <table className="w-full text-sm text-left">
                             <thead className="text-xs text-jewelry-light/70 uppercase bg-jewelry-darker border-b border-jewelry-gray">
                                 <tr>
-                                    <th className="px-6 py-4 font-medium w-16 text-center">Img</th>
+                                    <th className="px-8 py-4 font-medium w-24 text-center">Img</th>
                                     <th className="px-6 py-4 font-medium">Producto</th>
                                     <th className="px-6 py-4 font-medium">Categoría</th>
                                     <th className="px-6 py-4 font-medium text-right">Precio</th>
@@ -300,10 +300,10 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                                 <img
                                                     src={item.urlImagen}
                                                     alt={item.nombre}
-                                                    className="w-12 h-12 min-w-[3rem] object-cover rounded-md border border-jewelry-gray"
+                                                    className="w-18 h-18 min-w-[3rem] object-cover rounded-md border border-jewelry-gray"
                                                 />
                                             ) : (
-                                                <div className="w-12 h-12 min-w-[3rem] rounded-md bg-jewelry-gray/30 flex items-center justify-center text-jewelry-light/40 border border-jewelry-gray/50">
+                                                <div className="w-18 h-18 min-w-[3rem] rounded-md bg-jewelry-gray/30 flex items-center justify-center text-jewelry-light/40 border border-jewelry-gray/50">
                                                     <ImagePlus size={18} />
                                                 </div>
                                             )}

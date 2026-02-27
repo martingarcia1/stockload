@@ -7,7 +7,7 @@ import { Search, Plus, FileText, FileSpreadsheet, Loader2, ShoppingCart } from '
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { apiFetch } from '../utils/api';
+import { apiFetch, API_URL } from '../utils/api';
 
 const EgresosList = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +18,7 @@ const EgresosList = () => {
     useEffect(() => {
         const fetchEgresos = async () => {
             try {
-                const response = await apiFetch('http://localhost:5202/api/Egresos');
+                const response = await apiFetch(`${API_URL}/Egresos`);
                 if (response.ok) {
                     const data = await response.json();
                     setEgresos(data);

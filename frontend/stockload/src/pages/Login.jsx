@@ -5,6 +5,7 @@ import { Card, CardContent } from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { AlertCircle, Loader2, Lock, Mail } from 'lucide-react';
+import { API_URL } from '../utils/api';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5202/api/Auth/login', {
+            const response = await fetch(`${API_URL}/Auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

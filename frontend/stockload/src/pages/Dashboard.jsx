@@ -18,7 +18,7 @@ const StatCard = ({ title, value, icon: Icon, description, trend, trendColor = '
     </Card>
 );
 
-import { apiFetch } from '../utils/api';
+import { apiFetch, API_URL } from '../utils/api';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -32,7 +32,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await apiFetch('http://localhost:5202/api/stock/stats');
+                const response = await apiFetch(`${API_URL}/stock/stats`);
                 if (response.ok) {
                     const data = await response.json();
                     setStats(data);

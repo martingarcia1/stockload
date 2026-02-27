@@ -74,6 +74,9 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try
     {
+        // Aplicar migraciones pendientes a la base de datos automáticamente al inicio
+        context.Database.Migrate();
+
         // Revisar si hay registros, sino cargar el SQL
         if (!context.Items.Any())
         {
