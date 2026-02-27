@@ -29,13 +29,29 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
     const [categoryFilter, setCategoryFilter] = useState(defaultCategory);
     const [stockFilter, setStockFilter] = useState('Todos');
 
+    // Estados de paginación
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+    const pageSize = 10;
+
     useEffect(() => {
         const fetchStock = async () => {
+            setLoading(true);
             try {
-                const response = await apiFetch('http://localhost:5202/api/stock');
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    pageSize: pageSize,
+                    search: searchTerm || '',
+                    category: categoryFilter,
+                    stockStatus: stockFilter
+                });
+                const response = await apiFetch(`http://localhost:5202/api/stock/paginated?${params}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setItems(data);
+                    setItems(data.data || []);
+                    setTotalPages(data.totalPages);
+                    setTotalItems(data.totalItems);
                 }
             } catch (error) {
                 console.error("Error fetching stock:", error);
@@ -44,7 +60,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
             }
         };
         fetchStock();
-    }, []);
+    }, [currentPage, searchTerm, categoryFilter, stockFilter]);
 
     const handleDelete = async (id) => {
         if (window.confirm('¿Está seguro de eliminar este artículo?')) {
@@ -54,6 +70,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                 });
                 if (response.ok) {
                     setItems(items.filter(item => item.id !== id));
+                    setTotalItems(prev => prev - 1);
                 }
             } catch (error) {
                 console.error("Error deleting stock:", error);
@@ -61,25 +78,18 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
         }
     };
 
-    const filteredItems = items.filter(item => {
-        const matchesSearch = item.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.marca?.toLowerCase().includes(searchTerm.toLowerCase());
+    const handleExportExcel = async () => {
+        // Pedimos TODO el stock filtrado sin paginación temporalmente para descargar
+        const params = new URLSearchParams({
+            search: searchTerm || '',
+            category: categoryFilter,
+            stockStatus: stockFilter
+        });
+        const res = await apiFetch(`http://localhost:5202/api/stock/export?${params}`);
+        if (!res.ok) return;
+        const allItems = await res.json();
 
-        const matchesCategory = categoryFilter === 'Todas' || item.categoria === categoryFilter;
-
-        let matchesStock = true;
-        if (stockFilter === 'Bajo') {
-            matchesStock = item.stock <= item.minStock;
-        } else if (stockFilter === 'Óptimo') {
-            matchesStock = item.stock > item.minStock;
-        }
-
-        return matchesSearch && matchesCategory && matchesStock;
-    });
-
-    const handleExportExcel = () => {
-        const dataToExport = filteredItems.map(item => ({
+        const dataToExport = allItems.map(item => ({
             'ID': item.id,
             'Nombre': item.nombre || 'Sin nombre',
             'SKU': item.sku || 'N/A',
@@ -96,9 +106,18 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
         XLSX.writeFile(wb, `Inventario_${defaultCategory}_${new Date().toLocaleDateString('es-AR').replace(/\//g, '-')}.xlsx`);
     };
 
-    const handleExportPDF = () => {
-        const doc = new jsPDF();
+    const handleExportPDF = async () => {
+        // Pedimos TODO el stock filtrado
+        const params = new URLSearchParams({
+            search: searchTerm || '',
+            category: categoryFilter,
+            stockStatus: stockFilter
+        });
+        const res = await apiFetch(`http://localhost:5202/api/stock/export?${params}`);
+        if (!res.ok) return;
+        const allItems = await res.json();
 
+        const doc = new jsPDF();
         doc.setFontSize(18);
         doc.text(`Reporte de Inventario - ${defaultCategory}`, 14, 22);
 
@@ -109,7 +128,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
         const tableColumn = ["ID", "Producto", "SKU", "Categoría", "Precio ($)", "Stock"];
         const tableRows = [];
 
-        filteredItems.forEach(item => {
+        allItems.forEach(item => {
             const rowData = [
                 item.id,
                 item.nombre || 'Sin nombre',
@@ -182,7 +201,10 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                             placeholder="Buscar por nombre, SKU o marca..."
                             className="pl-10"
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setCurrentPage(1);
+                            }}
                         />
                     </div>
                     <div className="relative filters-container">
@@ -204,7 +226,10 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                         <label className="block text-xs text-jewelry-light/70 mb-1 leading-relaxed">Categoría</label>
                                         <select
                                             value={categoryFilter}
-                                            onChange={(e) => setCategoryFilter(e.target.value)}
+                                            onChange={(e) => {
+                                                setCategoryFilter(e.target.value);
+                                                setCurrentPage(1);
+                                            }}
                                             className="w-full bg-jewelry-gray/20 border border-jewelry-gray/50 rounded-md text-sm text-jewelry-light px-2 py-1.5 focus:outline-none focus:border-jewelry-gold"
                                         >
                                             <option value="Todas">Todas las categorías</option>
@@ -219,7 +244,10 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                         <label className="block text-xs text-jewelry-light/70 mb-1 leading-relaxed">Estado de Stock</label>
                                         <select
                                             value={stockFilter}
-                                            onChange={(e) => setStockFilter(e.target.value)}
+                                            onChange={(e) => {
+                                                setStockFilter(e.target.value);
+                                                setCurrentPage(1);
+                                            }}
                                             className="w-full bg-jewelry-gray/20 border border-jewelry-gray/50 rounded-md text-sm text-jewelry-light px-2 py-1.5 focus:outline-none focus:border-jewelry-gold"
                                         >
                                             <option value="Todos">Todos</option>
@@ -233,6 +261,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                             onClick={() => {
                                                 setCategoryFilter('Todas');
                                                 setStockFilter('Todos');
+                                                setCurrentPage(1);
                                             }}
                                             className="text-xs text-jewelry-light/50 hover:text-jewelry-gold transition-colors"
                                         >
@@ -264,7 +293,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredItems.map((item) => (
+                                {items.map((item) => (
                                     <tr key={item.id} className="border-b border-jewelry-gray/50 hover:bg-jewelry-gray/20 transition-colors">
                                         <td className="px-6 py-4">
                                             {item.urlImagen ? (
@@ -321,9 +350,9 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                         </td>
                                     </tr>
                                 ))}
-                                {filteredItems.length === 0 && (
+                                {items.length === 0 && (
                                     <tr>
-                                        <td colSpan="6" className="px-6 py-8 text-center text-jewelry-light/50">
+                                        <td colSpan="7" className="px-6 py-8 text-center text-jewelry-light/50">
                                             No se encontraron artículos en el inventario.
                                         </td>
                                     </tr>
@@ -333,10 +362,24 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                     )}
                 </div>
                 <div className="p-4 border-t border-jewelry-gray flex justify-between items-center text-sm text-jewelry-light/60">
-                    <span>Mostrando {filteredItems.length} artículos</span>
+                    <span>Mostrando {items.length} de {totalItems} artículos (Página {currentPage} de {totalPages || 1})</span>
                     <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" disabled>Anterior</Button>
-                        <Button variant="ghost" size="sm" disabled={filteredItems.length === 0}>Siguiente</Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={currentPage <= 1 || loading}
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        >
+                            Anterior
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={currentPage >= totalPages || items.length === 0 || loading}
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        >
+                            Siguiente
+                        </Button>
                     </div>
                 </div>
             </Card>

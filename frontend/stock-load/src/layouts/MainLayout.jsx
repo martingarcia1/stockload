@@ -27,7 +27,7 @@ const Sidebar = () => {
                     <h1 className="text-2xl font-display font-bold text-jewelry-light tracking-widest uppercase">
                         M<span className="text-jewelry-gold">ch.</span>
                     </h1>
-                    <p className="text-xs text-jewelry-light/60 tracking-widest uppercase mt-1">Marcelo Chavan</p>
+                    <p className="text-xs text-jewelry-light/60 tracking-widest uppercase mt-1">MarcelÖ Chavan</p>
                 </div>
             </div>
 

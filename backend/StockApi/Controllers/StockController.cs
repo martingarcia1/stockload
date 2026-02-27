@@ -66,6 +66,98 @@ namespace StockApi.Controllers
             }
         }
 
+        // GET: api/Stock/paginated
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PaginatedResponse<Item>>> GetStockPaginated(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? search = null,
+            [FromQuery] string? category = "Todas",
+            [FromQuery] string? stockStatus = "Todos")
+        {
+            var query = _context.Items.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                query = query.Where(i => 
+                    (i.Nombre != null && i.Nombre.ToLower().Contains(searchLower)) ||
+                    (i.Sku != null && i.Sku.ToLower().Contains(searchLower)) ||
+                    (i.Marca != null && i.Marca.ToLower().Contains(searchLower))
+                );
+            }
+
+            if (!string.IsNullOrEmpty(category) && category != "Todas")
+            {
+                query = query.Where(i => i.Categoria == category);
+            }
+
+            if (!string.IsNullOrEmpty(stockStatus))
+            {
+                if (stockStatus == "Bajo")
+                {
+                    query = query.Where(i => i.Stock <= i.MinStock);
+                }
+                else if (stockStatus == "Óptimo")
+                {
+                    query = query.Where(i => i.Stock > i.MinStock);
+                }
+            }
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(i => i.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var response = new PaginatedResponse<Item>(items, totalItems, page, pageSize);
+
+            return Ok(response);
+        }
+
+        // GET: api/Stock/export
+        [HttpGet("export")]
+        public async Task<ActionResult<IEnumerable<Item>>> GetStockForExport(
+             [FromQuery] string? search = null,
+             [FromQuery] string? category = "Todas",
+             [FromQuery] string? stockStatus = "Todos")
+        {
+            var query = _context.Items.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                query = query.Where(i =>
+                    (i.Nombre != null && i.Nombre.ToLower().Contains(searchLower)) ||
+                    (i.Sku != null && i.Sku.ToLower().Contains(searchLower)) ||
+                    (i.Marca != null && i.Marca.ToLower().Contains(searchLower))
+                );
+            }
+
+            if (!string.IsNullOrEmpty(category) && category != "Todas")
+            {
+                query = query.Where(i => i.Categoria == category);
+            }
+
+            if (!string.IsNullOrEmpty(stockStatus))
+            {
+                if (stockStatus == "Bajo")
+                {
+                    query = query.Where(i => i.Stock <= i.MinStock);
+                }
+                else if (stockStatus == "Óptimo")
+                {
+                    query = query.Where(i => i.Stock > i.MinStock);
+                }
+            }
+
+            var items = await query.OrderByDescending(i => i.Id).ToListAsync();
+
+            return Ok(items);
+        }
+
         // GET: api/Stock/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> GetItem(int id)
