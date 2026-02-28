@@ -26,10 +26,10 @@ JWT_SECRET=MiSuperClaveLargaYSeguraParaTokensJWT123!
 ```
 
 ## 4. ¡Encender Todo!
-Ubícate en la raíz del proyecto (donde está el archivo `docker-compose.yml`) y ejecuta la magia:
+Ubícate en la raíz del proyecto (donde está el archivo `docker-compose.yml`) y ejecuta la magia prestando especial atención en colocar la palabra \`sudo\` adelante:
 
 ```bash
-docker compose up -d
+sudo docker compose up -d
 ```
 
 ### ¿Qué sucederá tras ejecutar ese comando?
