@@ -1,0 +1,52 @@
+2026-03-03T14:37:19.261569190Z [inf]  
+2026-03-03T14:37:23.438811959Z [inf]  [35m[Region: asia-southeast1][0m
+2026-03-03T14:37:23.446488827Z [inf]  [35m=========================
+2026-03-03T14:37:23.446520845Z [inf]  Using Detected Dockerfile
+2026-03-03T14:37:23.446525792Z [inf]  =========================
+2026-03-03T14:37:23.446529790Z [inf]  [0m
+2026-03-03T14:37:23.446543515Z [inf]  context: qp20-6eRK
+2026-03-03T14:37:23.681845781Z [inf]  [internal] load build definition from Dockerfile
+2026-03-03T14:37:23.682018785Z [inf]  [internal] load build definition from Dockerfile
+2026-03-03T14:37:23.682402206Z [inf]  [internal] load build definition from Dockerfile
+2026-03-03T14:37:23.710140981Z [inf]  [internal] load build definition from Dockerfile
+2026-03-03T14:37:23.725420926Z [inf]  [internal] load metadata for mcr.microsoft.com/dotnet/aspnet:10.0
+2026-03-03T14:37:23.725476581Z [inf]  [internal] load metadata for mcr.microsoft.com/dotnet/sdk:10.0
+2026-03-03T14:37:23.863914947Z [inf]  [internal] load metadata for mcr.microsoft.com/dotnet/sdk:10.0
+2026-03-03T14:37:23.946341615Z [inf]  [internal] load metadata for mcr.microsoft.com/dotnet/aspnet:10.0
+2026-03-03T14:37:23.946725562Z [inf]  [internal] load .dockerignore
+2026-03-03T14:37:23.946773849Z [inf]  [internal] load .dockerignore
+2026-03-03T14:37:23.946888545Z [inf]  [internal] load .dockerignore
+2026-03-03T14:37:23.964933204Z [inf]  [internal] load .dockerignore
+2026-03-03T14:37:23.972199169Z [inf]  [build 7/7] RUN dotnet publish "StockApi.csproj" -c Release -o /app/publish
+2026-03-03T14:37:23.972236132Z [inf]  [build 6/7] RUN dotnet build "StockApi.csproj" -c Release -o /app/build
+2026-03-03T14:37:23.972250532Z [inf]  [build 5/7] COPY . .
+2026-03-03T14:37:23.972259396Z [inf]  [build 4/7] RUN dotnet restore "StockApi.csproj"
+2026-03-03T14:37:23.972273456Z [inf]  [build 3/7] COPY [StockApi.csproj, ./]
+2026-03-03T14:37:23.972282140Z [inf]  [internal] load build context
+2026-03-03T14:37:23.972291058Z [inf]  [build 2/7] WORKDIR /src
+2026-03-03T14:37:23.972298316Z [inf]  [build 1/7] FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:e362a8dbcd691522456da26a5198b8f3ca1d7641c95624fadc5e3e82678bd08a
+2026-03-03T14:37:23.972305428Z [inf]  [base 2/3] WORKDIR /app
+2026-03-03T14:37:23.972320553Z [inf]  [base 1/3] FROM mcr.microsoft.com/dotnet/aspnet:10.0@sha256:aec87aa74ddf129da573fa69f42f229a23c953a1c6fdecedea1aa6b1fe147d76
+2026-03-03T14:37:23.972338600Z [inf]  [base 3/3] COPY --from=build /app/publish .
+2026-03-03T14:37:23.972356082Z [inf]  [build 1/7] FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:e362a8dbcd691522456da26a5198b8f3ca1d7641c95624fadc5e3e82678bd08a
+2026-03-03T14:37:23.972373964Z [inf]  [base 1/3] FROM mcr.microsoft.com/dotnet/aspnet:10.0@sha256:aec87aa74ddf129da573fa69f42f229a23c953a1c6fdecedea1aa6b1fe147d76
+2026-03-03T14:37:23.972382152Z [inf]  [internal] load build context
+2026-03-03T14:37:24.010737533Z [inf]  [base 1/3] FROM mcr.microsoft.com/dotnet/aspnet:10.0@sha256:aec87aa74ddf129da573fa69f42f229a23c953a1c6fdecedea1aa6b1fe147d76
+2026-03-03T14:37:24.011394084Z [inf]  [build 1/7] FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:e362a8dbcd691522456da26a5198b8f3ca1d7641c95624fadc5e3e82678bd08a
+2026-03-03T14:37:24.012155962Z [inf]  [internal] load build context
+2026-03-03T14:37:24.022043812Z [inf]  [internal] load build context
+2026-03-03T14:37:24.024442287Z [inf]  [base 2/3] WORKDIR /app
+2026-03-03T14:37:24.024489520Z [inf]  [build 2/7] WORKDIR /src
+2026-03-03T14:37:24.024509024Z [inf]  [build 3/7] COPY [StockApi.csproj, ./]
+2026-03-03T14:37:24.024523124Z [inf]  [build 4/7] RUN dotnet restore "StockApi.csproj"
+2026-03-03T14:37:24.024546082Z [inf]  [build 5/7] COPY . .
+2026-03-03T14:37:24.024565983Z [inf]  [build 6/7] RUN dotnet build "StockApi.csproj" -c Release -o /app/build
+2026-03-03T14:37:24.024585120Z [inf]  [build 7/7] RUN dotnet publish "StockApi.csproj" -c Release -o /app/publish
+2026-03-03T14:37:24.024595317Z [inf]  [base 3/3] COPY --from=build /app/publish .
+2026-03-03T14:37:24.025591550Z [inf]  exporting to docker image format
+2026-03-03T14:37:24.025620925Z [inf]  exporting to image
+2026-03-03T14:37:24.105316487Z [inf]  [auth] sharing credentials for production-asia-southeast1-eqsg3a.railway-registry.com
+2026-03-03T14:37:24.105384035Z [inf]  [auth] sharing credentials for production-asia-southeast1-eqsg3a.railway-registry.com
+2026-03-03T14:37:24.802771440Z [inf]  importing to docker
+2026-03-03T14:37:27.124978133Z [inf]  importing to docker
+2026-03-03T14:37:29.029882265Z [inf]  [92mBuild time: 5.58 seconds[0m

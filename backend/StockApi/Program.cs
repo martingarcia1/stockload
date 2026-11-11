@@ -80,7 +80,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost")
+            policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost", "https://stockload.vercel.app")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });

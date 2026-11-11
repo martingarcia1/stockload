@@ -21,3 +21,6 @@ dist/
 .DS_Store
 Thumbs.db
 .idea/
+
+# Archivos temporales de Office (se crean al tener un .docx abierto)
+~$*

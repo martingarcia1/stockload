@@ -1,0 +1,405 @@
+2026-03-04T13:09:17.981975520Z [inf]  Starting Container
+2026-03-04T13:09:19.397724646Z [inf]  warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+2026-03-04T13:09:19.397735273Z [inf]        No XML encryptor configured. Key {11a55e54-7588-4a5c-820d-8c58df7d8e20} may be persisted to storage in unencrypted form.
+2026-03-04T13:09:19.397742561Z [inf]  warn: Microsoft.AspNetCore.Hosting.Diagnostics[15]
+2026-03-04T13:09:19.397750728Z [inf]        Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-03-04T13:09:19.397755375Z [inf]  Error insertando datos semilla: A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:09:19.397761626Z [inf]  info: Microsoft.Hosting.Lifetime[14]
+2026-03-04T13:09:19.397762146Z [inf]  warn: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository[60]
+2026-03-04T13:09:19.397769126Z [inf]        Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2026-03-04T13:09:19.397771268Z [inf]        Now listening on: http://[::]:8080
+2026-03-04T13:09:19.397777462Z [inf]  info: Microsoft.Hosting.Lifetime[0]
+2026-03-04T13:09:19.397783375Z [inf]        Application started. Press Ctrl+C to shut down.
+2026-03-04T13:09:19.397788376Z [inf]  info: Microsoft.Hosting.Lifetime[0]
+2026-03-04T13:09:19.397794060Z [inf]        Hosting environment: Production
+2026-03-04T13:09:19.397798694Z [inf]  info: Microsoft.Hosting.Lifetime[0]
+2026-03-04T13:09:19.397803235Z [inf]        Content root path: /app
+2026-03-04T13:10:19.389390133Z [inf]  warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+2026-03-04T13:10:19.389394441Z [inf]        Failed to determine the https port for redirect.
+2026-03-04T13:10:19.581642569Z [inf]  fail: Microsoft.EntityFrameworkCore.Database.Connection[20004]
+2026-03-04T13:10:19.581649351Z [inf]        An error occurred using the connection to database 'StockDB' on server 'switchyard.proxy.rlwy.net,30652'.
+2026-03-04T13:10:19.592470865Z [inf]  fail: Microsoft.EntityFrameworkCore.Query[10100]
+2026-03-04T13:10:19.592480072Z [inf]        An exception occurred while iterating over the results of a query for context type 'StockApi.Data.AppDbContext'.
+2026-03-04T13:10:19.592485128Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:10:19.592489919Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:10:19.592494800Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:10:19.592499937Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:10:19.592504910Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:19.592510553Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:10:19.592515220Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:19.592519561Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:10:19.592524215Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:10:19.592529107Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:10:19.592533672Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:19.592840490Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:19.592848909Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:10:19.592856568Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:10:19.592861400Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:10:19.592866684Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:10:19.592872207Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:10:19.592877548Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:10:19.592882509Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:10:19.592887231Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:10:19.592891970Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:10:19.593528668Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:10:19.593533835Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:10:19.593538494Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:19.593543708Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:19.593548265Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:10:19.593553298Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:10:19.593557874Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:10:19.593563375Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:19.593568530Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:19.594192108Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:10:19.594198668Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:10:19.594202953Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:10:19.594208086Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:10:19.594212326Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:10:19.594216695Z [inf]        ClientConnectionId:fd6770ed-dde5-4fcf-9cba-06622c15068e
+2026-03-04T13:10:19.594221215Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:10:19.594226372Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:10:19.594230471Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:10:19.594234163Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:10:19.594238910Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:19.594243135Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:10:19.594856021Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:19.594862944Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:10:19.594867992Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:10:19.594874867Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:10:19.594879929Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:19.594884645Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:19.594889626Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:10:19.594894464Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:10:19.594899055Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:10:19.594903434Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:10:19.594907869Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:10:19.594912111Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:10:19.595275144Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:10:19.595281921Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:10:19.595288535Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:10:19.595294386Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:10:19.595300351Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:10:19.595305035Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:19.595309691Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:19.595952449Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:10:19.595957255Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:10:19.595961239Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:10:19.595965266Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:19.595970036Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:19.595974324Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:10:19.595978099Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:10:19.595982563Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:10:19.595986995Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:10:19.595991695Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:10:19.595995910Z [inf]        ClientConnectionId:fd6770ed-dde5-4fcf-9cba-06622c15068e
+2026-03-04T13:10:19.606973126Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:10:19.606982706Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:19.606987741Z [inf]        Connection id "0HNJPTTH249B1", Request id "0HNJPTTH249B1:00000001": An unhandled exception was thrown by the application.
+2026-03-04T13:10:19.606996961Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:10:19.607002934Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:10:19.607010385Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:10:19.607016761Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:10:19.607023406Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:19.607030045Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:10:19.607036223Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:19.607041561Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:10:19.607046314Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:10:19.607083664Z [inf]  fail: Microsoft.AspNetCore.Server.Kestrel[13]
+2026-03-04T13:10:19.607260442Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:19.607266993Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:10:19.607271441Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:10:19.607277924Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:10:19.607282808Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:10:19.607286821Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:10:19.607291195Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:10:19.607295874Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:10:19.607299721Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:10:19.607303720Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:10:19.607976587Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:10:19.607983860Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:10:19.607990239Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:19.607995954Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:19.607999976Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:10:19.608004134Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:10:19.608008246Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:10:19.608013746Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:19.608018012Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:19.608021946Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:10:19.608858947Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+2026-03-04T13:10:19.608864760Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:10:19.608868971Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:10:19.608875791Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:10:19.608880299Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:10:19.608884857Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:10:19.608888736Z [inf]           at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+2026-03-04T13:10:19.608893583Z [inf]           at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+2026-03-04T13:10:19.608897661Z [inf]           at StockApi.Controllers.AuthController.Login(LoginRequest request) in /src/Controllers/AuthController.cs:line 29
+2026-03-04T13:10:19.608901661Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+2026-03-04T13:10:19.609568142Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+2026-03-04T13:10:19.609575286Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+2026-03-04T13:10:19.609579931Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:10:19.609584164Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:10:19.609589572Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+2026-03-04T13:10:19.609594294Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+2026-03-04T13:10:19.609599119Z [inf]           at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+2026-03-04T13:10:19.609603578Z [inf]           at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+2026-03-04T13:10:19.609607819Z [inf]           at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-03-04T13:10:19.609612258Z [inf]        ClientConnectionId:fd6770ed-dde5-4fcf-9cba-06622c15068e
+2026-03-04T13:10:39.614177901Z [inf]  fail: Microsoft.EntityFrameworkCore.Database.Connection[20004]
+2026-03-04T13:10:39.614186371Z [inf]        An error occurred using the connection to database 'StockDB' on server 'switchyard.proxy.rlwy.net,30652'.
+2026-03-04T13:10:39.614193614Z [inf]  fail: Microsoft.EntityFrameworkCore.Query[10100]
+2026-03-04T13:10:39.614203412Z [inf]        An exception occurred while iterating over the results of a query for context type 'StockApi.Data.AppDbContext'.
+2026-03-04T13:10:39.614209675Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:10:39.614215879Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:10:39.614222672Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:10:39.614229862Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:10:39.614236626Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:39.614242864Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:10:39.614249484Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:39.614256596Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:10:39.614262849Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:10:39.614269102Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:10:39.614729159Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:39.614733604Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:39.614738081Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:10:39.614741818Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:10:39.614745679Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:10:39.614749737Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:10:39.614755332Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:10:39.614760357Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:10:39.614764378Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:10:39.614768028Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:10:39.615311869Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:10:39.615323025Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:10:39.615330457Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:10:39.615336775Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:39.615343635Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:39.615350325Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:10:39.615356628Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:10:39.615362901Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:10:39.616116376Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:39.616125512Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:39.616131935Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:10:39.616136224Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:10:39.616140275Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:10:39.616144144Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:10:39.616147984Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:10:39.616152129Z [inf]        ClientConnectionId:c1282142-6173-4d7d-b16b-c889b511e203
+2026-03-04T13:10:39.616158101Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:10:39.616162408Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:10:39.616167379Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:10:39.616958813Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:10:39.616965835Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:39.616970739Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:10:39.616975303Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:39.616979420Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:10:39.616984040Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:10:39.616988272Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:10:39.616993718Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:39.616999666Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:39.617005742Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:10:39.617011415Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:10:39.617016871Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:10:39.617022360Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:10:39.617707529Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:10:39.617715773Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:10:39.617722133Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:10:39.617726908Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:10:39.617731894Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:10:39.617736819Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:10:39.617741144Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:10:39.618511821Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:39.618518832Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:39.618523936Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:10:39.618529028Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:10:39.618534010Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:10:39.618538853Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:39.618543719Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:39.618549067Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:10:39.618553951Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:10:39.618558450Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:10:39.619219889Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:10:39.619227924Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:10:39.619232994Z [inf]        ClientConnectionId:c1282142-6173-4d7d-b16b-c889b511e203
+2026-03-04T13:10:39.619238055Z [inf]  fail: Microsoft.AspNetCore.Server.Kestrel[13]
+2026-03-04T13:10:39.619242425Z [inf]        Connection id "0HNJPTTH249B2", Request id "0HNJPTTH249B2:00000002": An unhandled exception was thrown by the application.
+2026-03-04T13:10:39.619247706Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:10:39.619252506Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:10:39.619257335Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:10:39.619261613Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:10:39.619266350Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:39.619271016Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:10:39.619277405Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:10:39.619283038Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:10:39.619878804Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:10:39.619885179Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:10:39.619891022Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:39.619895980Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:10:39.619900321Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:10:39.619905132Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:10:39.619910822Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:10:39.619915522Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:10:39.619920482Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:10:39.619925189Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:10:39.619929802Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:10:39.620584148Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:10:39.620595002Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:10:39.620602009Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:10:39.620609451Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:10:39.620615759Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:39.620622536Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:10:39.620629514Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:10:39.621445383Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:10:39.621452930Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:10:39.621458460Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:39.621463459Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:10:39.621468896Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:10:39.621473634Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:10:39.621478513Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:10:39.621483351Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:10:39.621487936Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:10:39.621492487Z [inf]           at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+2026-03-04T13:10:39.621497029Z [inf]           at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+2026-03-04T13:10:39.622123247Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:10:39.622129714Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:10:39.622135510Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+2026-03-04T13:10:39.622137445Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+2026-03-04T13:10:39.622140892Z [inf]           at StockApi.Controllers.AuthController.Login(LoginRequest request) in /src/Controllers/AuthController.cs:line 29
+2026-03-04T13:10:39.622148042Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+2026-03-04T13:10:39.622151425Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+2026-03-04T13:10:39.622155098Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+2026-03-04T13:10:39.622160348Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+2026-03-04T13:10:39.622165829Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:10:39.622660193Z [inf]           at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+2026-03-04T13:10:39.622665524Z [inf]           at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+2026-03-04T13:10:39.622669889Z [inf]           at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-03-04T13:10:39.622675045Z [inf]        ClientConnectionId:c1282142-6173-4d7d-b16b-c889b511e203
+2026-03-04T13:11:09.623218140Z [inf]  fail: Microsoft.EntityFrameworkCore.Database.Connection[20004]
+2026-03-04T13:11:09.623223358Z [inf]        An error occurred using the connection to database 'StockDB' on server 'switchyard.proxy.rlwy.net,30652'.
+2026-03-04T13:11:09.623230095Z [inf]  fail: Microsoft.EntityFrameworkCore.Query[10100]
+2026-03-04T13:11:09.623235360Z [inf]        An exception occurred while iterating over the results of a query for context type 'StockApi.Data.AppDbContext'.
+2026-03-04T13:11:09.623240373Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:11:09.623244561Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:11:09.623248859Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:11:09.623252953Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:11:09.623257433Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:11:09.623263011Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:11:09.623267434Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:11:09.623271590Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:11:09.623277293Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:11:09.623282073Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:11:09.623752281Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:11:09.623761171Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:11:09.623767342Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:11:09.623772501Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:11:09.623777938Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:11:09.623783480Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:11:09.623788404Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:11:09.623793311Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:11:09.623797806Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:11:09.623802871Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:11:09.624443905Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:11:09.624449233Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:11:09.624459375Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:11:09.624468374Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:11:09.624473242Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:11:09.624477288Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:11:09.624481568Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:11:09.624485983Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:11:09.625243488Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:11:09.625253528Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:11:09.625259862Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:11:09.625265408Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:11:09.625271331Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:11:09.625276668Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:11:09.625281763Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:11:09.625286980Z [inf]        ClientConnectionId:32c09870-730f-449d-8ec4-a9e60dc08767
+2026-03-04T13:11:09.625292541Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:11:09.625297543Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:11:09.625302060Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:11:09.625900882Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:11:09.625907585Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:11:09.625912874Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:11:09.625917559Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:11:09.625923342Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:11:09.625928540Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:11:09.625933283Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:11:09.625938093Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:11:09.625942250Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:11:09.625948622Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:11:09.625954917Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:11:09.625963776Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:11:09.625970106Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:11:09.626494911Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:11:09.626501855Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:11:09.626506952Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:11:09.626511587Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:11:09.626516728Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:11:09.626520721Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:11:09.626526265Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:11:09.627258978Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:11:09.627265921Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:11:09.627267791Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:11:09.627273120Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:11:09.627276796Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:11:09.627279818Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:11:09.627283388Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:11:09.627288336Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:11:09.627293446Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:11:09.627298222Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:11:09.628008348Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:11:09.628017284Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:11:09.628023116Z [inf]        ClientConnectionId:32c09870-730f-449d-8ec4-a9e60dc08767
+2026-03-04T13:11:09.628027964Z [inf]  fail: Microsoft.AspNetCore.Server.Kestrel[13]
+2026-03-04T13:11:09.628033392Z [inf]        Connection id "0HNJPTTH249B3", Request id "0HNJPTTH249B3:00000002": An unhandled exception was thrown by the application.
+2026-03-04T13:11:09.628038602Z [inf]        Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)
+2026-03-04T13:11:09.628043105Z [inf]         ---> System.IO.IOException: Unable to read data from the transport connection: Connection reset by peer.
+2026-03-04T13:11:09.628048058Z [inf]         ---> System.Net.Sockets.SocketException (104): Connection reset by peer
+2026-03-04T13:11:09.628052491Z [inf]           at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+2026-03-04T13:11:09.628057469Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:11:09.628061809Z [inf]           --- End of inner exception stack trace ---
+2026-03-04T13:11:09.628066263Z [inf]           at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+2026-03-04T13:11:09.628070606Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniPacket.ReadFromStream(Stream stream)
+2026-03-04T13:11:09.628075226Z [inf]           at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Receive(SniPacket& packet, Int32 timeoutInMilliseconds)
+2026-03-04T13:11:09.628635938Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+2026-03-04T13:11:09.628643967Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:11:09.628649469Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+2026-03-04T13:11:09.628655190Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+2026-03-04T13:11:09.628659823Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+2026-03-04T13:11:09.628664765Z [inf]           at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+2026-03-04T13:11:09.628669305Z [inf]           at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCertificateFilename)
+2026-03-04T13:11:09.628674607Z [inf]           at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+2026-03-04T13:11:09.628679485Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2026-03-04T13:11:09.628684341Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2026-03-04T13:11:09.629365106Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2026-03-04T13:11:09.629370451Z [inf]           at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2026-03-04T13:11:09.629375137Z [inf]           at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2026-03-04T13:11:09.629380465Z [inf]           at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2026-03-04T13:11:09.629384814Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:11:09.629389133Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2026-03-04T13:11:09.629393820Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2026-03-04T13:11:09.630045839Z [inf]           at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+2026-03-04T13:11:09.630054221Z [inf]        --- End of stack trace from previous location ---
+2026-03-04T13:11:09.630061076Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:11:09.630068480Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+2026-03-04T13:11:09.630074498Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+2026-03-04T13:11:09.630078994Z [inf]           at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+2026-03-04T13:11:09.630085245Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+2026-03-04T13:11:09.630089940Z [inf]           at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+2026-03-04T13:11:09.630095544Z [inf]           at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-03-04T13:11:09.630102156Z [inf]           at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+2026-03-04T13:11:09.630106681Z [inf]           at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+2026-03-04T13:11:09.630744304Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+2026-03-04T13:11:09.630751068Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+2026-03-04T13:11:09.630763488Z [inf]           at StockApi.Controllers.AuthController.Login(LoginRequest request) in /src/Controllers/AuthController.cs:line 29
+2026-03-04T13:11:09.630769974Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+2026-03-04T13:11:09.630774133Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+2026-03-04T13:11:09.630779647Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:11:09.630784168Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+2026-03-04T13:11:09.630788988Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+2026-03-04T13:11:09.630793368Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:11:09.630797700Z [inf]           at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2026-03-04T13:11:09.631324975Z [inf]           at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+2026-03-04T13:11:09.631332240Z [inf]           at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+2026-03-04T13:11:09.631338940Z [inf]           at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-03-04T13:11:09.631345763Z [inf]        ClientConnectionId:32c09870-730f-449d-8ec4-a9e60dc08767
