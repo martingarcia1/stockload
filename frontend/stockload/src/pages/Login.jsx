@@ -31,7 +31,7 @@ const Login = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                login(data.token, { email: data.email, rol: data.rol });
+                login(data.token, { email: data.email, nombre: data.nombre, rol: data.rol });
                 navigate('/');
             } else {
                 const errData = await response.json();

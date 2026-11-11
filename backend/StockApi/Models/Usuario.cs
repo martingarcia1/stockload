@@ -17,7 +17,13 @@ namespace StockApi.Models
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
 
+        [MaxLength(100)]
+        public string? Nombre { get; set; }
+
+        /// <summary>Propietario | Administradora | Vendedor (ver <see cref="Roles"/>).</summary>
         [MaxLength(20)]
-        public string Rol { get; set; } = "Admin";
+        public string Rol { get; set; } = Roles.Vendedor;
+
+        public bool Activo { get; set; } = true;
     }
 }

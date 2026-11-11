@@ -35,9 +35,13 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
+    const rol = user?.rol;
     const value = {
         user,
         token,
+        rol,
+        // Propietario y Administradora: caja, arqueo, reportes, usuarios y configuración
+        esGestion: rol === 'Propietario' || rol === 'Administradora' || rol === 'Admin',
         isAuthenticated: !!token,
         login,
         logout,

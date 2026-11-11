@@ -5,7 +5,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import { ArrowLeft, Loader2, Save, AlertTriangle, ImagePlus, X } from 'lucide-react';
 import Barcode from 'react-barcode';
-import { apiFetch } from '../utils/api';
+import { apiFetch, API_URL } from '../utils/api';
 
 const StockForm = () => {
     const { id } = useParams();
@@ -18,6 +18,7 @@ const StockForm = () => {
         marca: '',
         categoria: 'Relojes',
         precio: '',
+        moneda: 'ARS',
         stock: '',
         minStock: '',
         urlImagen: ''
@@ -34,7 +35,7 @@ const StockForm = () => {
         if (isEditMode) {
             const fetchItem = async () => {
                 try {
-                    const response = await apiFetch(`http://localhost:5202/api/stock/${id}`);
+                    const response = await apiFetch(`${API_URL}/stock/${id}`);
                     if (response.ok) {
                         const data = await response.json();
                         setFormData({
@@ -43,6 +44,7 @@ const StockForm = () => {
                             marca: data.marca || '',
                             categoria: data.categoria || 'Relojes',
                             precio: data.precio || '',
+                            moneda: data.moneda || 'ARS',
                             stock: data.stock || '',
                             minStock: data.minStock || '',
                             urlImagen: data.urlImagen || ''
@@ -135,7 +137,7 @@ const StockForm = () => {
                 <body>
                     <div class="product-name">${formData.nombre || 'Sin nombre'}</div>
                     ${svgElement}
-                    <div class="price">$${formData.precio?.toLocaleString('es-AR') || '0'}</div>
+                    <div class="price">${formData.moneda === 'USD' ? 'US$' : '$'} ${Number(formData.precio || 0).toLocaleString('es-AR')}</div>
                 </body>
             </html>
         `);
@@ -159,7 +161,7 @@ const StockForm = () => {
                 const formDataImage = new FormData();
                 formDataImage.append('file', imageFile);
 
-                const uploadResponse = await apiFetch('http://localhost:5202/api/upload', {
+                const uploadResponse = await apiFetch(`${API_URL}/upload`, {
                     method: 'POST',
                     body: formDataImage,
                     // No configurar 'Content-Type': 'application/json' cuando se usa FormData
@@ -188,8 +190,8 @@ const StockForm = () => {
             }
 
             const url = isEditMode
-                ? `http://localhost:5202/api/stock/${id}`
-                : 'http://localhost:5202/api/stock';
+                ? `${API_URL}/stock/${id}`
+                : `${API_URL}/stock`;
 
             const method = isEditMode ? 'PUT' : 'POST';
 
@@ -349,15 +351,28 @@ const StockForm = () => {
                             </select>
                         </div>
 
-                        <Input
-                            label="Precio de Venta ($ ARS)"
-                            type="number"
-                            name="precio"
-                            value={formData.precio}
-                            onChange={handleChange}
-                            placeholder="Ej. 850000"
-                            required
-                        />
+                        <div className="grid grid-cols-[1fr_auto] gap-2 items-end">
+                            <Input
+                                label={`Precio de Venta (${formData.moneda === 'USD' ? 'US$' : '$ ARS'})`}
+                                type="number"
+                                step="0.01"
+                                name="precio"
+                                value={formData.precio}
+                                onChange={handleChange}
+                                placeholder={formData.moneda === 'USD' ? 'Ej. 1200' : 'Ej. 850000'}
+                                required
+                            />
+                            <select
+                                name="moneda"
+                                value={formData.moneda}
+                                onChange={handleChange}
+                                aria-label="Moneda del precio"
+                                className="h-10 rounded-md border border-jewelry-gray bg-jewelry-darker px-3 text-sm text-jewelry-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jewelry-gold"
+                            >
+                                <option value="ARS">ARS</option>
+                                <option value="USD">USD</option>
+                            </select>
+                        </div>
 
                         <Input
                             label="Stock Actual (Unidades)"

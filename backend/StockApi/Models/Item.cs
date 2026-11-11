@@ -36,6 +36,11 @@ namespace StockApi.Models
         [Column("precio", TypeName = "decimal(18,2)")]
         public decimal Precio { get; set; }
 
+        /// <summary>Moneda en la que está expresado el precio: ARS o USD.</summary>
+        [Column("moneda")]
+        [MaxLength(3)]
+        public string Moneda { get; set; } = Monedas.ARS;
+
         [Column("esActivo")]
         public bool? EsActivo { get; set; } = true;
 

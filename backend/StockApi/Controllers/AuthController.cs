@@ -28,7 +28,7 @@ namespace StockApi.Controllers
             // 1. Buscar usuario por email
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == request.Email);
             
-            if (usuario == null)
+            if (usuario == null || !usuario.Activo)
             {
                 return Unauthorized(new { message = "Credenciales incorrectas" });
             }
@@ -44,7 +44,7 @@ namespace StockApi.Controllers
             // 3. Si todo está ok, generar Token JWT
             var token = GenerarTokenJWT(usuario);
 
-            return Ok(new { token = token, email = usuario.Email, rol = usuario.Rol });
+            return Ok(new { token = token, email = usuario.Email, nombre = usuario.Nombre, rol = usuario.Rol });
         }
 
         private string GenerarTokenJWT(Usuario usuario)

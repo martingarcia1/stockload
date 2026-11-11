@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { AlertTriangle, ArrowLeft, Loader2, Save } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, Loader2, Save, ShoppingBag } from 'lucide-react';
 import Select from 'react-select';
-import { apiFetch } from '../utils/api';
+import { apiFetch, API_URL } from '../utils/api';
 
 const EgresoForm = () => {
     const navigate = useNavigate();
@@ -16,12 +16,14 @@ const EgresoForm = () => {
 
     const [itemId, setItemId] = useState('');
     const [cantidad, setCantidad] = useState(1);
-    const [motivo, setMotivo] = useState('Venta');
+    const [motivo, setMotivo] = useState('Devolución');
+    const [observaciones, setObservaciones] = useState('');
+    const requiereObs = motivo === 'Otro' || motivo === 'Ajuste';
 
     useEffect(() => {
         const fetchStock = async () => {
             try {
-                const response = await apiFetch('http://localhost:5202/api/stock');
+                const response = await apiFetch(`${API_URL}/stock`);
                 if (response.ok) {
                     const data = await response.json();
                     // Ordenar alfabéticamente para más fácil selección
@@ -63,10 +65,11 @@ const EgresoForm = () => {
             const payload = {
                 itemId: Number(itemId),
                 cantidad: Number(cantidad),
-                motivo: motivo
+                motivo: motivo,
+                observaciones: observaciones || null
             };
 
-            const response = await apiFetch('http://localhost:5202/api/Egresos', {
+            const response = await apiFetch(`${API_URL}/Egresos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -99,7 +102,7 @@ const EgresoForm = () => {
                 </button>
                 <div>
                     <h2 className="text-3xl font-display font-bold text-jewelry-light tracking-tight">Registrar Egreso</h2>
-                    <p className="text-jewelry-light/60 mt-1">Registrar salida y descontar stock del inventario.</p>
+                    <p className="text-jewelry-light/60 mt-1">Salida de mercadería sin cobro (devoluciones, garantías, mermas, regalos).</p>
                 </div>
             </div>
 
@@ -218,13 +221,35 @@ const EgresoForm = () => {
                                         onChange={(e) => setMotivo(e.target.value)}
                                         className="w-full bg-jewelry-dark border border-jewelry-gray/60 rounded-md text-sm text-jewelry-light px-3 py-2.5 focus:outline-none focus:border-jewelry-gold focus:ring-1 focus:ring-jewelry-gold"
                                     >
-                                        <option value="Venta">Venta a Cliente</option>
                                         <option value="Devolución">Devolución a Proveedor</option>
                                         <option value="Garantía">Garantía / Reparación</option>
                                         <option value="Merma">Merma / Pérdida</option>
+                                        <option value="Regalo">Regalo / Muestra</option>
+                                        <option value="Ajuste">Ajuste de Inventario</option>
                                         <option value="Otro">Otro Motivo</option>
                                     </select>
                                 </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-jewelry-light/80 mb-2">
+                                    Observaciones {requiereObs ? '*' : '(opcional)'}
+                                </label>
+                                <Input
+                                    value={observaciones}
+                                    onChange={(e) => setObservaciones(e.target.value)}
+                                    required={requiereObs}
+                                    placeholder="Ej. Proveedor X, remito 0001-1234 / se rompió el broche"
+                                />
+                            </div>
+
+                            <div className="p-3 rounded-md bg-jewelry-gold/5 border border-jewelry-gold/20 text-sm text-jewelry-light/70 flex items-start gap-2">
+                                <ShoppingBag size={16} className="text-jewelry-gold flex-shrink-0 mt-0.5" />
+                                <span>
+                                    Los egresos son salidas <strong>sin cobro</strong>. Para vender a un cliente use{' '}
+                                    <button type="button" onClick={() => navigate('/ventas/nueva')} className="text-jewelry-gold underline">Nueva Venta</button>,
+                                    así el cobro queda registrado en la caja.
+                                </span>
                             </div>
                         </div>
                     </CardContent>

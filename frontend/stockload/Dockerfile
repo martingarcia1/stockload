@@ -6,7 +6,9 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-# En producción inyectamos la variable hacia el compilado
+# En producción inyectamos la variable hacia el compilado (viene de build.args en docker-compose)
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 # Etapa 2: Servidor Web Nginx ultra-ligero

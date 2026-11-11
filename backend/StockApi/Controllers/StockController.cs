@@ -174,8 +174,14 @@ namespace StockApi.Controllers
 
         // POST: api/Stock
         [HttpPost]
+        [Authorize(Roles = Roles.Gestion)]
         public async Task<ActionResult<Item>> PostItem(Item item)
         {
+            if (!Monedas.EsValida(item.Moneda))
+            {
+                return BadRequest("Moneda inválida. Use ARS o USD.");
+            }
+
             // Set default date
             item.FechaRegistro = DateTime.Now;
 
@@ -187,11 +193,17 @@ namespace StockApi.Controllers
 
         // PUT: api/Stock/5
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Gestion)]
         public async Task<IActionResult> PutItem(int id, Item item)
         {
             if (id != item.Id)
             {
                 return BadRequest("El ID del ítem no coincide con el ID de la URL.");
+            }
+
+            if (!Monedas.EsValida(item.Moneda))
+            {
+                return BadRequest("Moneda inválida. Use ARS o USD.");
             }
 
             _context.Entry(item).State = EntityState.Modified;
@@ -217,12 +229,18 @@ namespace StockApi.Controllers
 
         // DELETE: api/Stock/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Gestion)]
         public async Task<IActionResult> DeleteItem(int id)
         {
             var item = await _context.Items.FindAsync(id);
             if (item == null)
             {
                 return NotFound();
+            }
+
+            if (await _context.VentaItems.AnyAsync(v => v.ItemId == id))
+            {
+                return BadRequest("El producto tiene ventas registradas y no puede eliminarse. Márquelo como inactivo o deje su stock en 0.");
             }
 
             _context.Items.Remove(item);

@@ -6,9 +6,11 @@ import Input from '../components/Input';
 import { Search, Filter, Plus, Edit2, Trash2, Watch, Diamond, PackageOpen, Loader2, Download, FileText, FileSpreadsheet, ImagePlus } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
-import { apiFetch } from '../utils/api';
+import { apiFetch, API_URL } from '../utils/api';
+import { useAuth } from '../context/AuthContext';
+import { formatMoney } from '../utils/format';
 
 const CategoryIcon = ({ category }) => {
     switch (category) {
@@ -21,6 +23,7 @@ const CategoryIcon = ({ category }) => {
 const StockList = ({ defaultCategory = 'Todas' }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
+    const { esGestion } = useAuth();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -46,7 +49,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                     category: categoryFilter,
                     stockStatus: stockFilter
                 });
-                const response = await apiFetch(`http://localhost:5202/api/stock/paginated?${params}`);
+                const response = await apiFetch(`${API_URL}/stock/paginated?${params}`);
                 if (response.ok) {
                     const data = await response.json();
                     setItems(data.data || []);
@@ -65,7 +68,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Está seguro de eliminar este artículo?')) {
             try {
-                const response = await apiFetch(`http://localhost:5202/api/stock/${id}`, {
+                const response = await apiFetch(`${API_URL}/stock/${id}`, {
                     method: 'DELETE'
                 });
                 if (response.ok) {
@@ -85,7 +88,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
             category: categoryFilter,
             stockStatus: stockFilter
         });
-        const res = await apiFetch(`http://localhost:5202/api/stock/export?${params}`);
+        const res = await apiFetch(`${API_URL}/stock/export?${params}`);
         if (!res.ok) return;
         const allItems = await res.json();
 
@@ -96,6 +99,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
             'Marca': item.marca || 'S/M',
             'Categoría': item.categoria || 'General',
             'Precio': item.precio || 0,
+            'Moneda': item.moneda || 'ARS',
             'Stock Actual': item.stock || 0,
             'Stock Mínimo': item.minStock || 0
         }));
@@ -113,7 +117,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
             category: categoryFilter,
             stockStatus: stockFilter
         });
-        const res = await apiFetch(`http://localhost:5202/api/stock/export?${params}`);
+        const res = await apiFetch(`${API_URL}/stock/export?${params}`);
         if (!res.ok) return;
         const allItems = await res.json();
 
@@ -134,13 +138,13 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                 item.nombre || 'Sin nombre',
                 item.sku || 'N/A',
                 item.categoria || 'General',
-                item.precio?.toLocaleString('es-AR') || '0',
+                formatMoney(item.precio, item.moneda),
                 `${item.stock || 0} / ${item.minStock || 0} mín.`
             ];
             tableRows.push(rowData);
         });
 
-        doc.autoTable({
+        autoTable(doc, {
             head: [tableColumn],
             body: tableRows,
             startY: 40,
@@ -184,10 +188,12 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                         <FileText size={18} className="text-red-400" />
                         <span className="hidden sm:inline">PDF</span>
                     </Button>
-                    <Button variant="primary" className="flex items-center gap-2" onClick={() => navigate('/inventario/nuevo')}>
-                        <Plus size={18} />
-                        Nuevo
-                    </Button>
+                    {esGestion && (
+                        <Button variant="primary" className="flex items-center gap-2" onClick={() => navigate('/inventario/nuevo')}>
+                            <Plus size={18} />
+                            Nuevo
+                        </Button>
+                    )}
                 </div>
             </div>
 
@@ -321,7 +327,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-right font-medium text-jewelry-gold">
-                                            ${item.precio?.toLocaleString('es-AR') ?? '0'}
+                                            {formatMoney(item.precio, item.moneda)}
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <span className="font-medium text-jewelry-light">{item.stock}</span>
@@ -339,14 +345,14 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                             )}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center justify-end gap-2">
+                                            {esGestion && <div className="flex items-center justify-end gap-2">
                                                 <button onClick={() => navigate(`/inventario/editar/${item.id}`)} className="p-2 text-jewelry-light/60 hover:text-jewelry-gold hover:bg-jewelry-gray rounded-md transition-colors" title="Editar">
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button onClick={() => handleDelete(item.id)} className="p-2 text-jewelry-light/60 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-colors" title="Eliminar">
                                                     <Trash2 size={16} />
                                                 </button>
-                                            </div>
+                                            </div>}
                                         </td>
                                     </tr>
                                 ))}

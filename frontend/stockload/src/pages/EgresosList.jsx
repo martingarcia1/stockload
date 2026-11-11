@@ -6,12 +6,27 @@ import Input from '../components/Input';
 import { Search, Plus, FileText, FileSpreadsheet, Loader2, ShoppingCart } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { apiFetch, API_URL } from '../utils/api';
+import { useAuth } from '../context/AuthContext';
+
+const MOTIVOS = {
+    Devolución: 'Devolución a proveedor',
+    Garantía: 'Garantía / Reparación',
+    Merma: 'Merma / Pérdida',
+    Regalo: 'Regalo / Muestra',
+    Ajuste: 'Ajuste de inventario',
+    Otro: 'Otro',
+    // Registros cargados antes de que existiera el módulo de Ventas
+    Venta: 'Venta (registro anterior)',
+};
+
+const labelMotivo = (m) => MOTIVOS[m] || m || 'N/A';
 
 const EgresosList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
+    const { esGestion } = useAuth();
     const [egresos, setEgresos] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -35,7 +50,8 @@ const EgresosList = () => {
     const filteredEgresos = egresos.filter(egreso =>
         egreso.item?.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         egreso.item?.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        egreso.motivo?.toLowerCase().includes(searchTerm.toLowerCase())
+        egreso.motivo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        egreso.observaciones?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleExportExcel = () => {
@@ -45,7 +61,9 @@ const EgresosList = () => {
             'Producto': e.item?.nombre || 'Desconocido',
             'SKU': e.item?.sku || 'N/A',
             'Cantidad': e.cantidad,
-            'Motivo': e.motivo || 'N/A'
+            'Motivo': labelMotivo(e.motivo),
+            'Observaciones': e.observaciones || '',
+            'Usuario': e.usuario || ''
         }));
 
         const ws = XLSX.utils.json_to_sheet(dataToExport);
@@ -58,13 +76,13 @@ const EgresosList = () => {
         const doc = new jsPDF();
 
         doc.setFontSize(18);
-        doc.text(`Historial de Egresos y Ventas`, 14, 22);
+        doc.text(`Historial de Egresos de Stock`, 14, 22);
 
         doc.setFontSize(11);
         doc.setTextColor(100);
         doc.text(`Generado el: ${new Date().toLocaleString('es-AR')}`, 14, 30);
 
-        const tableColumn = ["ID", "Fecha", "Producto", "SKU", "Cantidad", "Motivo"];
+        const tableColumn = ["ID", "Fecha", "Producto", "SKU", "Cantidad", "Motivo", "Usuario"];
         const tableRows = [];
 
         filteredEgresos.forEach(e => {
@@ -74,12 +92,13 @@ const EgresosList = () => {
                 e.item?.nombre || 'Desconocido',
                 e.item?.sku || 'N/A',
                 e.cantidad.toString(),
-                e.motivo || 'N/A'
+                labelMotivo(e.motivo) + (e.observaciones ? ` (${e.observaciones})` : ''),
+                e.usuario || '-'
             ];
             tableRows.push(rowData);
         });
 
-        doc.autoTable({
+        autoTable(doc, {
             head: [tableColumn],
             body: tableRows,
             startY: 40,
@@ -94,8 +113,8 @@ const EgresosList = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-display font-bold text-jewelry-light tracking-tight">Ventas y Egresos</h2>
-                    <p className="text-jewelry-light/60 mt-1">Registro histórico de salidas de inventario y ventas.</p>
+                    <h2 className="text-3xl font-display font-bold text-jewelry-light tracking-tight">Egresos de Stock</h2>
+                    <p className="text-jewelry-light/60 mt-1">Mercadería que salió sin cobro: devoluciones, garantías, mermas, regalos y ajustes. Las ventas están en "Ventas".</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <Button variant="outline" className="flex items-center gap-2 hover:border-green-500/50 hover:bg-green-500/10 transition-colors" onClick={handleExportExcel} title="Exportar a Excel">
@@ -106,10 +125,10 @@ const EgresosList = () => {
                         <FileText size={18} className="text-red-400" />
                         <span className="hidden sm:inline">PDF</span>
                     </Button>
-                    <Button variant="primary" className="flex items-center gap-2" onClick={() => navigate('/egresos/nuevo')}>
+                    {esGestion && <Button variant="primary" className="flex items-center gap-2" onClick={() => navigate('/egresos/nuevo')}>
                         <Plus size={18} />
                         Registrar Egreso
-                    </Button>
+                    </Button>}
                 </div>
             </div>
 
@@ -141,6 +160,7 @@ const EgresosList = () => {
                                     <th className="px-6 py-4 font-medium">Producto</th>
                                     <th className="px-6 py-4 font-medium text-center">Cantidad</th>
                                     <th className="px-6 py-4 font-medium">Motivo</th>
+                                    <th className="px-6 py-4 font-medium">Usuario</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,13 +177,17 @@ const EgresosList = () => {
                                             <span className="font-bold text-red-500">-{e.cantidad}</span>
                                         </td>
                                         <td className="px-6 py-4 text-jewelry-light/80">
-                                            {e.motivo || 'N/A'}
+                                            <span className={e.motivo === 'Venta' ? 'text-jewelry-light/50 italic' : ''}>{labelMotivo(e.motivo)}</span>
+                                            {e.observaciones && <div className="text-xs text-jewelry-light/50 mt-1">{e.observaciones}</div>}
+                                        </td>
+                                        <td className="px-6 py-4 text-jewelry-light/60 text-xs">
+                                            {e.usuario || '-'}
                                         </td>
                                     </tr>
                                 ))}
                                 {filteredEgresos.length === 0 && (
                                     <tr>
-                                        <td colSpan="4" className="px-6 py-8 text-center text-jewelry-light/50">
+                                        <td colSpan="5" className="px-6 py-8 text-center text-jewelry-light/50">
                                             No se encontraron registros de egresos.
                                         </td>
                                     </tr>

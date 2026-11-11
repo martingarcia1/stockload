@@ -31,11 +31,23 @@ namespace StockApi.Controllers
 
         // POST: api/Egresos
         [HttpPost]
+        [Authorize(Roles = Roles.Gestion)]
         public async Task<ActionResult<Egreso>> PostEgreso([FromBody] Egreso egreso)
         {
             if (egreso.Cantidad <= 0)
             {
                 return BadRequest("La cantidad debe ser mayor a cero.");
+            }
+
+            // Las ventas se registran en el módulo de Ventas (precio, caja y factura), no como egreso
+            var motivosValidos = new[] { "Devolución", "Garantía", "Merma", "Regalo", "Ajuste", "Otro" };
+            if (string.IsNullOrWhiteSpace(egreso.Motivo) || !motivosValidos.Contains(egreso.Motivo))
+            {
+                return BadRequest("Motivo inválido. Las ventas a clientes se registran desde \"Nueva Venta\".");
+            }
+            if ((egreso.Motivo == "Otro" || egreso.Motivo == "Ajuste") && string.IsNullOrWhiteSpace(egreso.Observaciones))
+            {
+                return BadRequest("Indique una observación para este motivo.");
             }
 
             var item = await _context.Items.FindAsync(egreso.ItemId);
@@ -59,7 +71,10 @@ namespace StockApi.Controllers
                 _context.Entry(item).State = EntityState.Modified;
 
                 // 2. Registrar egreso
-                egreso.FechaEgreso = DateTime.Now;
+                egreso.FechaEgreso = Hora.Ahora();
+                egreso.Usuario = User.Email();
+                egreso.Observaciones = egreso.Observaciones?.Trim();
+                egreso.Item = null; // evitar que EF intente insertar el producto si viene en el body
                 _context.Egresos.Add(egreso);
 
                 await _context.SaveChangesAsync();

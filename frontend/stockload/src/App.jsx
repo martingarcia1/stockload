@@ -8,14 +8,12 @@ import StockForm from './pages/StockForm';
 import EgresosList from './pages/EgresosList';
 import EgresoForm from './pages/EgresoForm';
 import Login from './pages/Login';
-
-// Simple placeholder for pages we haven't built yet
-const ComingSoon = ({ title }) => (
-  <div className="flex flex-col items-center justify-center h-[60vh]">
-    <h2 className="text-4xl font-display font-medium text-jewelry-gold mb-2">{title}</h2>
-    <p className="text-jewelry-light/60">Sección en desarrollo para la joyería Marcelo Chavan.</p>
-  </div>
-);
+import PuntoVenta from './pages/PuntoVenta';
+import VentasList from './pages/VentasList';
+import Caja from './pages/Caja';
+import ArqueoDiario from './pages/ArqueoDiario';
+import Usuarios from './pages/Usuarios';
+import Configuracion from './pages/Configuracion';
 
 // Componente para proteger las rutas
 const ProtectedRoute = ({ children }) => {
@@ -28,6 +26,12 @@ const ProtectedRoute = ({ children }) => {
   }
 
   return children;
+};
+
+// Sólo Propietario y Administradora
+const GestionRoute = ({ children }) => {
+  const { esGestion } = useAuth();
+  return esGestion ? children : <Navigate to="/" replace />;
 };
 
 function App() {
@@ -43,17 +47,25 @@ function App() {
             </ProtectedRoute>
           }>
             <Route index element={<Dashboard />} />
+            <Route path="ventas">
+              <Route index element={<VentasList />} />
+              <Route path="nueva" element={<PuntoVenta />} />
+            </Route>
             <Route path="inventario">
               <Route index element={<StockList key="todas" />} />
-              <Route path="nuevo" element={<StockForm />} />
-              <Route path="editar/:id" element={<StockForm />} />
+              <Route path="nuevo" element={<GestionRoute><StockForm /></GestionRoute>} />
+              <Route path="editar/:id" element={<GestionRoute><StockForm /></GestionRoute>} />
             </Route>
             <Route path="relojes" element={<StockList key="relojes" defaultCategory="Relojes" />} />
             <Route path="joyas" element={<StockList key="joyas" defaultCategory="Joyas" />} />
             <Route path="egresos">
               <Route index element={<EgresosList />} />
-              <Route path="nuevo" element={<EgresoForm />} />
+              <Route path="nuevo" element={<GestionRoute><EgresoForm /></GestionRoute>} />
             </Route>
+            <Route path="caja" element={<GestionRoute><Caja /></GestionRoute>} />
+            <Route path="arqueo-diario" element={<GestionRoute><ArqueoDiario /></GestionRoute>} />
+            <Route path="usuarios" element={<GestionRoute><Usuarios /></GestionRoute>} />
+            <Route path="configuracion" element={<GestionRoute><Configuracion /></GestionRoute>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

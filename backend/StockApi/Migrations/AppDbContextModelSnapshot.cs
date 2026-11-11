@@ -22,6 +22,174 @@ namespace StockApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("StockApi.Models.Arqueo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CajaSesionId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ContadoArs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ContadoUsd")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("EsCierre")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("EsperadoArs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("EsperadoUsd")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Usuario")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CajaSesionId");
+
+                    b.ToTable("Arqueos");
+                });
+
+            modelBuilder.Entity("StockApi.Models.CajaSesion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Abierta")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("ContadoArs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ContadoUsd")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("EsperadoArs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("EsperadoUsd")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("FechaApertura")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaCierre")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("FondoInicialArs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FondoInicialUsd")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ObservacionesCierre")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("UsuarioApertura")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UsuarioCierre")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Abierta");
+
+                    b.ToTable("CajaSesiones");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Configuracion", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("AlicuotaIva")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("ArcaAmbiente")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("ArcaHabilitado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CondicionFiscal")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal?>("CotizacionManual")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Cuit")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("DomicilioComercial")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<bool>("FacturarPorDefecto")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IngresosBrutos")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime?>("InicioActividades")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PuntoVenta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RazonSocial")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("TipoDolar")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal?>("UltimaCotizacion")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UltimaCotizacionFecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("UsarCotizacionManual")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Configuracion");
+                });
+
             modelBuilder.Entity("StockApi.Models.Egreso", b =>
                 {
                     b.Property<int>("Id")
@@ -45,6 +213,14 @@ namespace StockApi.Migrations
                     b.Property<string>("Motivo")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("motivo");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Usuario")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -89,6 +265,14 @@ namespace StockApi.Migrations
                         .HasColumnType("int")
                         .HasColumnName("minStock");
 
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)")
+                        .HasDefaultValue("ARS")
+                        .HasColumnName("moneda");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("descripcion");
@@ -118,6 +302,54 @@ namespace StockApi.Migrations
                     b.ToTable("Producto", (string)null);
                 });
 
+            modelBuilder.Entity("StockApi.Models.MovimientoCaja", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CajaSesionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Concepto")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("RecibidoPor")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Usuario")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CajaSesionId");
+
+                    b.ToTable("MovimientosCaja");
+                });
+
             modelBuilder.Entity("StockApi.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -126,8 +358,17 @@ namespace StockApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Nombre")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -142,7 +383,202 @@ namespace StockApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Venta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Anulada")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Cae")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CaeVencimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CajaSesionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClienteCondicionIva")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("ClienteDocNro")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ClienteDocTipo")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("ClienteNombre")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<decimal>("Cotizacion")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DescuentoGeneral")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("DescuentoMotivo")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("FacturaError")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("FacturaEstado")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaAnulacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("ImporteIva")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("MedioPago")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("MotivoAnulacion")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<decimal?>("NetoGravado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("NumeroComprobante")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("PuntoVenta")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("TipoComprobante")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalArs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Usuario")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UsuarioAnulacion")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CajaSesionId");
+
+                    b.HasIndex("Fecha");
+
+                    b.ToTable("Ventas");
+                });
+
+            modelBuilder.Entity("StockApi.Models.VentaItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("DescuentoMotivo")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MonedaLista")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<decimal>("PrecioLista")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrecioUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Sku")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("VentaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("VentaId");
+
+                    b.ToTable("VentaItems");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Arqueo", b =>
+                {
+                    b.HasOne("StockApi.Models.CajaSesion", "CajaSesion")
+                        .WithMany("Arqueos")
+                        .HasForeignKey("CajaSesionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CajaSesion");
                 });
 
             modelBuilder.Entity("StockApi.Models.Egreso", b =>
@@ -154,6 +590,58 @@ namespace StockApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("StockApi.Models.MovimientoCaja", b =>
+                {
+                    b.HasOne("StockApi.Models.CajaSesion", "CajaSesion")
+                        .WithMany("Movimientos")
+                        .HasForeignKey("CajaSesionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CajaSesion");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Venta", b =>
+                {
+                    b.HasOne("StockApi.Models.CajaSesion", "CajaSesion")
+                        .WithMany()
+                        .HasForeignKey("CajaSesionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CajaSesion");
+                });
+
+            modelBuilder.Entity("StockApi.Models.VentaItem", b =>
+                {
+                    b.HasOne("StockApi.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StockApi.Models.Venta", "Venta")
+                        .WithMany("Items")
+                        .HasForeignKey("VentaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Venta");
+                });
+
+            modelBuilder.Entity("StockApi.Models.CajaSesion", b =>
+                {
+                    b.Navigation("Arqueos");
+
+                    b.Navigation("Movimientos");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Venta", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

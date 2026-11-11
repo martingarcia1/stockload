@@ -1,16 +1,17 @@
 services:
   # 1. Base de Datos en Producción (SQL Server)
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
     container_name: stock_db
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${DB_PASSWORD:-Sup3rSecr3t!2026}
-      - MSSQL_PID=Express
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD:?Falta DB_PASSWORD en el archivo .env (ver .env.example)}
     ports:
-      - "1433:1433"
+      # Sólo accesible desde esta PC (para SSMS/Azure Data Studio); la API usa la red interna de Docker
+      - "127.0.0.1:1433:1433"
     volumes:
       - sql_data:/var/opt/mssql
+    user: root
     restart: unless-stopped
 
   # 2. Servidor Backend (.NET)
@@ -18,23 +19,29 @@ services:
     build:
       context: ./backend/StockApi
       dockerfile: Dockerfile
+    image: stock_api_img
     container_name: stock_api
     depends_on:
       - db
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       # Connection String que apunta al contenedor SQL Server interno ('db')
-      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=StockDB;User Id=sa;Password=${DB_PASSWORD:-Sup3rSecr3t!2026};TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=StockDB;User Id=sa;Password=${DB_PASSWORD:?Falta DB_PASSWORD};TrustServerCertificate=True;
       # Cloudinary Params
-      - CloudinarySettings__CloudName=${CLOUDINARY_CLOUD_NAME:-dkvoct2ee}
-      - CloudinarySettings__ApiKey=${CLOUDINARY_API_KEY:-382599797473274}
-      - CloudinarySettings__ApiSecret=${CLOUDINARY_API_SECRET:-pGZugOioF3TYZFytQqKkbMTa-yA}
+      - CloudinarySettings__CloudName=${CLOUDINARY_CLOUD_NAME:?Falta CLOUDINARY_CLOUD_NAME en .env}
+      - CloudinarySettings__ApiKey=${CLOUDINARY_API_KEY:?Falta CLOUDINARY_API_KEY en .env}
+      - CloudinarySettings__ApiSecret=${CLOUDINARY_API_SECRET:?Falta CLOUDINARY_API_SECRET en .env}
       # JWT Settings
-      - JwtSettings__Key=${JWT_SECRET:-MchStockSuperSecretJwtKey123!AndMoreCharactersToMakeItSecure}
+      - JwtSettings__Key=${JWT_SECRET:?Falta JWT_SECRET en .env}
       - JwtSettings__Issuer=MchStockAPI
       - JwtSettings__Audience=MchStockReactApp
+      # Primer usuario Propietario (sólo si la base no tiene usuarios)
+      - SeedAdmin__Email=${SEED_ADMIN_EMAIL:-}
+      - SeedAdmin__Password=${SEED_ADMIN_PASSWORD:-}
     ports:
       - "5202:8080"
+    volumes:
+      - ./database:/app/database
     restart: unless-stopped
 
   # 3. Interfaz de Usuario (React + Nginx)
@@ -42,15 +49,29 @@ services:
     build:
       context: ./frontend/stockload
       dockerfile: Dockerfile
+      args:
+        # Vacío = la web llama a la API en su misma dirección (/api), y nginx la reenvía al contenedor 'api'.
+        # Sólo definirla (sin "/api" al final) si la API se publica en otra dirección.
+        - VITE_API_URL=${VITE_API_URL:-}
+    image: stock_web_img
     container_name: stock_web
     depends_on:
       - api
     ports:
       # Exponemos el Frontend en el puerto 80 nativo para no tener que tipear el puerto
       - "80:80"
-    environment:
-      # Vite detectará esta variable al momento del build dentro del contenedor si se inyecta
-      - VITE_API_URL=http://localhost:5202/api
+    restart: unless-stopped
+
+  # 4. Túnel público gratuito (opcional) para mostrar el sistema a alguien fuera de la red.
+  #    Sólo arranca con:  docker compose --profile compartir up -d
+  #    El link aparece con: docker compose logs tunnel
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: stock_tunnel
+    command: tunnel --no-autoupdate --url http://web:80
+    depends_on:
+      - web
+    profiles: ["compartir"]
     restart: unless-stopped
 
 volumes:

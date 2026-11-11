@@ -8,6 +8,10 @@ using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Claves locales para desarrollo (no se suben a GitHub). En Docker vienen por variables de entorno desde .env.
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: false);
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -24,9 +28,25 @@ Account cloudinaryAccount = new Account(
 Cloudinary cloudinary = new Cloudinary(cloudinaryAccount);
 builder.Services.AddSingleton(cloudinary);
 
+// Cotización del dólar (dolarapi.com) y facturación
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient("dolarapi", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["Cotizacion:BaseUrl"] ?? "https://dolarapi.com/");
+    c.Timeout = TimeSpan.FromSeconds(8);
+});
+builder.Services.AddScoped<StockApi.Services.CotizacionService>();
+// TODO ARCA: reemplazar por la implementación WSAA + WSFEv1 cuando se tenga el certificado digital.
+builder.Services.AddScoped<StockApi.Services.IFacturacionService, StockApi.Services.FacturacionNoConfiguradaService>();
+
 // Config JWT 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings.GetValue<string>("Key");
+if (string.IsNullOrWhiteSpace(secretKey) || secretKey.Length < 32)
+{
+    throw new InvalidOperationException(
+        "Falta JwtSettings:Key (mínimo 32 caracteres). En Docker: JWT_SECRET en .env. Con 'dotnet run': appsettings.Local.json.");
+}
 
 builder.Services.AddAuthentication(options =>
 {
@@ -60,7 +80,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
+            policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -74,39 +94,79 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try
     {
-        // Aplicar migraciones pendientes a la base de datos automáticamente al inicio
-        context.Database.Migrate();
+        // Aplicar migraciones pendientes a la base de datos automáticamente al inicio.
+        // SQL Server puede tardar en levantar (sobre todo en equipos con poca RAM): se reintenta hasta ~3 minutos.
+        for (int intento = 1; ; intento++)
+        {
+            try
+            {
+                context.Database.Migrate();
+                break;
+            }
+            catch (Exception ex) when (intento < 18)
+            {
+                Console.WriteLine($"Base de datos no disponible (intento {intento}/18): {ex.Message}. Reintentando en 10 s...");
+                Thread.Sleep(TimeSpan.FromSeconds(10));
+            }
+        }
 
         // Revisar si hay registros, sino cargar el SQL
         if (!context.Items.Any())
         {
-            var sqlFilePath = @"D:\app carga de stock\database\Productos_Insert_Export.sql";
+            var sqlFilePath = "/app/database/Productos_Insert_Export.sql";
             if (System.IO.File.Exists(sqlFilePath))
             {
                 var sql = System.IO.File.ReadAllText(sqlFilePath);
-                context.Database.ExecuteSqlRaw(sql);
-                Console.WriteLine("Datos semilla inyectados con éxito desde el archivo SQL original.");
+                var batches = System.Text.RegularExpressions.Regex.Split(sql, @"^\s*GO\s*$", System.Text.RegularExpressions.RegexOptions.Multiline | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                
+                context.Database.SetCommandTimeout(300); // 5 minutes timeout just in case
+                context.Database.OpenConnection();
+                try
+                {
+                    int count = 0;
+                    foreach (var batch in batches)
+                    {
+                        if (!string.IsNullOrWhiteSpace(batch))
+                        {
+                            context.Database.ExecuteSqlRaw(batch);
+                            count++;
+                            if (count % 500 == 0)
+                            {
+                                Console.WriteLine($"Procesados {count} bloques SQL...");
+                            }
+                        }
+                    }
+                    Console.WriteLine("Datos semilla inyectados con éxito desde el archivo SQL original.");
+                }
+                finally
+                {
+                    context.Database.CloseConnection();
+                }
             }
         }
 
         // Sembrar el usuario maestro si no hay usuarios en la DB
+        // Email y contraseña vienen de la configuración (SeedAdmin__Email / SeedAdmin__Password en .env),
+        // nunca escritos en el código.
         if (!context.Usuarios.Any())
         {
-            var adminUser = new Usuario
+            var seedEmail = app.Configuration["SeedAdmin:Email"];
+            var seedPassword = app.Configuration["SeedAdmin:Password"];
+            if (string.IsNullOrWhiteSpace(seedEmail) || string.IsNullOrWhiteSpace(seedPassword))
             {
-                Email = "mestebansiufi14@gmail.com",
-                // Contraseña "Admin123!" cifrada con BCrypt o simplemente como texto plano si lo hasheamos en AuthController
-                // Lo más ideal es guardar el hash: usaremos BCrypt en el AuthController, 
-                // pero por ahora para arrancar usaremos BCryptNet para crear el hash.
-                // Como no hemos instalado BCrypt.Net-Next, usaremos una versión hasheada generada con BCrypt "Admin123!" 
-                // O mejor instalo BCrypt.Net-Next más adelante, o pongo el hash quemado "$2a$11$m2vP.rS/f...":
-                // Hash the password manually for now using standard approach:
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
-                Rol = "Admin"
-            };
-            context.Usuarios.Add(adminUser);
-            context.SaveChanges();
-            Console.WriteLine("Usuario maestro inyectado con éxito.");
+                Console.WriteLine("No hay usuarios y falta SeedAdmin:Email / SeedAdmin:Password en la configuración: no se creó el usuario inicial.");
+            }
+            else
+            {
+                context.Usuarios.Add(new Usuario
+                {
+                    Email = seedEmail.Trim().ToLower(),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedPassword),
+                    Rol = Roles.Propietario
+                });
+                context.SaveChanges();
+                Console.WriteLine("Usuario maestro inyectado con éxito.");
+            }
         }
     }
     catch (Exception ex)

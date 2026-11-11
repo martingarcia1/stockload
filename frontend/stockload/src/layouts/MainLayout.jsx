@@ -1,10 +1,15 @@
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Tag, Watch, UserCircle, LogOut, ShoppingCart } from 'lucide-react';
+import {
+    LayoutDashboard, Package, Tag, Watch, UserCircle, LogOut, ShoppingCart,
+    ShoppingBag, Receipt, Wallet, ClipboardList, Users, Settings, DollarSign
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import useCotizacion from '../hooks/useCotizacion';
+import { formatMoney } from '../utils/format';
 
 const Sidebar = () => {
-    const { logout } = useAuth();
+    const { logout, esGestion } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -12,12 +17,34 @@ const Sidebar = () => {
         navigate('/login');
     };
 
-    const navItems = [
-        { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
-        { name: 'Inventario', icon: Package, path: '/inventario' },
-        { name: 'Relojes', icon: Watch, path: '/relojes' },
-        { name: 'Joyas', icon: Tag, path: '/joyas' },
-        { name: 'Ventas y Egresos', icon: ShoppingCart, path: '/egresos' },
+    const secciones = [
+        {
+            titulo: null,
+            items: [
+                { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
+                { name: 'Nueva Venta', icon: ShoppingBag, path: '/ventas/nueva' },
+                { name: 'Ventas', icon: Receipt, path: '/ventas', end: true },
+            ]
+        },
+        {
+            titulo: 'Inventario',
+            items: [
+                { name: 'Inventario', icon: Package, path: '/inventario' },
+                { name: 'Relojes', icon: Watch, path: '/relojes' },
+                { name: 'Joyas', icon: Tag, path: '/joyas' },
+                { name: 'Egresos de Stock', icon: ShoppingCart, path: '/egresos' },
+            ]
+        },
+        {
+            titulo: 'Administración',
+            soloGestion: true,
+            items: [
+                { name: 'Caja', icon: Wallet, path: '/caja' },
+                { name: 'Arqueo Diario', icon: ClipboardList, path: '/arqueo-diario' },
+                { name: 'Usuarios', icon: Users, path: '/usuarios' },
+                { name: 'Configuración', icon: Settings, path: '/configuracion' },
+            ]
+        },
     ];
 
     return (
@@ -31,21 +58,29 @@ const Sidebar = () => {
                 </div>
             </div>
 
-            <nav className="flex-1 p-4 space-y-2">
-                {navItems.map((item) => (
-                    <NavLink
-                        key={item.name}
-                        to={item.path}
-                        className={({ isActive }) =>
-                            `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                ? 'bg-jewelry-gray text-jewelry-gold'
-                                : 'text-jewelry-light hover:bg-jewelry-gray/50 hover:text-jewelry-white'
-                            }`
-                        }
-                    >
-                        <item.icon size={20} />
-                        <span className="font-medium">{item.name}</span>
-                    </NavLink>
+            <nav className="flex-1 p-4 space-y-4 overflow-y-auto">
+                {secciones.filter(s => !s.soloGestion || esGestion).map((seccion, idx) => (
+                    <div key={idx} className="space-y-1">
+                        {seccion.titulo && (
+                            <p className="px-4 pt-2 pb-1 text-[11px] uppercase tracking-widest text-jewelry-light/40">{seccion.titulo}</p>
+                        )}
+                        {seccion.items.map((item) => (
+                            <NavLink
+                                key={item.path}
+                                to={item.path}
+                                end={item.end || item.path === '/'}
+                                className={({ isActive }) =>
+                                    `flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors ${isActive
+                                        ? 'bg-jewelry-gray text-jewelry-gold'
+                                        : 'text-jewelry-light hover:bg-jewelry-gray/50 hover:text-jewelry-white'
+                                    }`
+                                }
+                            >
+                                <item.icon size={18} />
+                                <span className="font-medium text-sm">{item.name}</span>
+                            </NavLink>
+                        ))}
+                    </div>
                 ))}
             </nav>
 
@@ -62,13 +97,36 @@ const Sidebar = () => {
     );
 };
 
+const NOMBRES_DOLAR = {
+    oficial: 'Oficial', blue: 'Blue', bolsa: 'MEP', contadoconliqui: 'CCL', tarjeta: 'Tarjeta', mayorista: 'Mayorista'
+};
+
 const Header = () => {
+    const { user } = useAuth();
+    const { cotizacion, error } = useCotizacion();
+
     return (
-        <header className="h-20 bg-jewelry-darker border-b border-jewelry-gray flex items-center justify-end px-8 sticky top-0 z-10">
+        <header className="h-20 bg-jewelry-darker border-b border-jewelry-gray flex items-center justify-between px-8 sticky top-0 z-10">
+            <div className="flex items-center gap-2 text-sm">
+                <DollarSign size={16} className="text-jewelry-gold" />
+                {cotizacion ? (
+                    <span className="text-jewelry-light/80">
+                        Dólar {NOMBRES_DOLAR[cotizacion.tipo] || cotizacion.tipo}:{' '}
+                        <span className="text-jewelry-gold font-semibold">{formatMoney(cotizacion.valor)}</span>
+                        {cotizacion.fuente !== 'automatica' && (
+                            <span className="ml-2 text-xs text-amber-400">
+                                ({cotizacion.fuente === 'manual' ? 'manual' : 'último valor guardado'})
+                            </span>
+                        )}
+                    </span>
+                ) : (
+                    <span className="text-red-400 text-xs">{error || 'Cargando cotización…'}</span>
+                )}
+            </div>
             <div className="flex items-center space-x-4">
                 <div className="text-right hidden md:block">
-                    <p className="text-sm font-medium text-jewelry-light">Admin</p>
-                    <p className="text-xs text-jewelry-light/60">gerencia@marcelochavan.com</p>
+                    <p className="text-sm font-medium text-jewelry-light">{user?.nombre || user?.email}</p>
+                    <p className="text-xs text-jewelry-light/60">{user?.rol === 'Admin' ? 'Propietario' : user?.rol}</p>
                 </div>
                 <div className="h-10 w-10 rounded-full bg-jewelry-gray flex items-center justify-center text-jewelry-gold">
                     <UserCircle size={24} />

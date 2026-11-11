@@ -1,0 +1,23 @@
+# ---------- Secretos (NUNCA subir) ----------
+.env
+*.env.local
+backend/StockApi/appsettings.Local.json
+
+# ---------- .NET ----------
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# ---------- Node / Vite ----------
+node_modules/
+dist/
+
+# ---------- Logs ----------
+*.log
+
+# ---------- Sistema / editores ----------
+.DS_Store
+Thumbs.db
+.idea/

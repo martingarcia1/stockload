@@ -19,6 +19,7 @@ const StatCard = ({ title, value, icon: Icon, description, trend, trendColor = '
 );
 
 import { apiFetch, API_URL } from '../utils/api';
+import { formatMoney } from '../utils/format';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -121,7 +122,7 @@ const Dashboard = () => {
                                     </div>
                                     <div className="text-right flex-shrink-0 ml-4">
                                         <p className="text-sm font-medium text-jewelry-light/80">{item.stock || 0} uni.</p>
-                                        <p className="text-xs text-jewelry-gold font-medium">${item.precio?.toLocaleString('es-AR')}</p>
+                                        <p className="text-xs text-jewelry-gold font-medium">{formatMoney(item.precio, item.moneda)}</p>
                                     </div>
                                 </div>
                             ))}
