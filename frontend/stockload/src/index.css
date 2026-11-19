@@ -55,3 +55,28 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-jewelry-gold);
 }
+/* ---------- Impresión del ticket de factura (tiquetera 80 mm) ----------
+   ComprobanteModal copia el ticket a <body> dentro de .ticket-imprimir: al imprimir se oculta todo lo demás. */
+.ticket-imprimir {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: 80mm auto;
+    margin: 3mm;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  body > *:not(.ticket-imprimir) {
+    display: none !important;
+  }
+
+  .ticket-imprimir {
+    display: block !important;
+    width: 72mm;
+  }
+}

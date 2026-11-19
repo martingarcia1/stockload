@@ -49,6 +49,10 @@ namespace StockApi.Models
         /// <summary>Si es true, toda venta nueva se marca para facturar por defecto.</summary>
         public bool FacturarPorDefecto { get; set; } = true;
 
+        /// <summary>Texto al pie del ticket de la factura (ej. "¡Gracias por su compra!").</summary>
+        [MaxLength(250)]
+        public string? MensajePie { get; set; }
+
         // ---------- Cotización del dólar ----------
         /// <summary>oficial | blue | bolsa | contadoconliqui | tarjeta | mayorista (endpoints de dolarapi.com)</summary>
         [MaxLength(30)]

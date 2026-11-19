@@ -22,6 +22,28 @@ namespace StockApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("StockApi.Models.ArcaTicket", b =>
+                {
+                    b.Property<string>("Clave")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTime>("Expira")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Sign")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Clave");
+
+                    b.ToTable("ArcaTickets");
+                });
+
             modelBuilder.Entity("StockApi.Models.Arqueo", b =>
                 {
                     b.Property<int>("Id")
@@ -122,6 +144,49 @@ namespace StockApi.Migrations
                     b.ToTable("CajaSesiones");
                 });
 
+            modelBuilder.Entity("StockApi.Models.Cliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CondicionIvaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Creado")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DocNro")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<int>("DocTipo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Domicilio")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Telefono")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocTipo", "DocNro")
+                        .IsUnique();
+
+                    b.ToTable("Clientes");
+                });
+
             modelBuilder.Entity("StockApi.Models.Configuracion", b =>
                 {
                     b.Property<int>("Id")
@@ -163,6 +228,10 @@ namespace StockApi.Migrations
 
                     b.Property<DateTime?>("InicioActividades")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("MensajePie")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("PuntoVenta")
                         .HasColumnType("int");
@@ -227,6 +296,105 @@ namespace StockApi.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("Egresos");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Factura", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AsociadaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Cae")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("CaeVencimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Creada")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Entorno")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Numero")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("PuntoVenta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReceptorCondicionIva")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<int>("ReceptorCondicionIvaId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ReceptorDocNro")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ReceptorDocTipo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReceptorDomicilio")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("ReceptorNombre")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ReceptorTelefono")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Usuario")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("VentaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Fecha");
+
+                    b.HasIndex("VentaId");
+
+                    b.HasIndex("Entorno", "Tipo", "PuntoVenta", "Numero")
+                        .IsUnique();
+
+                    b.ToTable("Facturas");
                 });
 
             modelBuilder.Entity("StockApi.Models.Item", b =>
@@ -590,6 +758,17 @@ namespace StockApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("StockApi.Models.Factura", b =>
+                {
+                    b.HasOne("StockApi.Models.Venta", "Venta")
+                        .WithMany()
+                        .HasForeignKey("VentaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("StockApi.Models.MovimientoCaja", b =>

@@ -36,8 +36,10 @@ builder.Services.AddHttpClient("dolarapi", c =>
     c.Timeout = TimeSpan.FromSeconds(8);
 });
 builder.Services.AddScoped<StockApi.Services.CotizacionService>();
-// TODO ARCA: reemplazar por la implementación WSAA + WSFEv1 cuando se tenga el certificado digital.
-builder.Services.AddScoped<StockApi.Services.IFacturacionService, StockApi.Services.FacturacionNoConfiguradaService>();
+// Facturación electrónica ARCA (Factura C). Certificado: Arca:Cert/Arca:Key o carpeta arca/<entorno>/
+builder.Services.AddHttpClient("arca", c => c.Timeout = TimeSpan.FromSeconds(30));
+builder.Services.AddSingleton<StockApi.Services.ArcaService>();
+builder.Services.AddScoped<StockApi.Services.FacturacionService>();
 
 // Config JWT 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

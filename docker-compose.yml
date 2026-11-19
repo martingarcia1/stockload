@@ -38,10 +38,16 @@ services:
       # Primer usuario Propietario (sólo si la base no tiene usuarios)
       - SeedAdmin__Email=${SEED_ADMIN_EMAIL:-}
       - SeedAdmin__Password=${SEED_ADMIN_PASSWORD:-}
+      # Facturación ARCA
+      - Arca__Entorno=${ARCA_ENTORNO:-homologacion}
+      - Arca__Cert=${ARCA_CERT:-}
+      - Arca__Key=${ARCA_KEY:-}
     ports:
       - "5202:8080"
     volumes:
       - ./database:/app/database
+      # Certificado de ARCA (carpetas homologacion/ y produccion/ con el .crt y el .key)
+      - ./backend/StockApi/arca:/app/arca:ro
     restart: unless-stopped
 
   # 3. Interfaz de Usuario (React + Nginx)

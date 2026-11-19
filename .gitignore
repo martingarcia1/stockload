@@ -2,6 +2,14 @@
 .env
 *.env.local
 backend/StockApi/appsettings.Local.json
+# Certificado y clave privada de ARCA (facturación electrónica)
+backend/StockApi/arca/*
+!backend/StockApi/arca/README.md
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
 
 # ---------- .NET ----------
 bin/

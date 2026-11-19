@@ -14,6 +14,7 @@ import Caja from './pages/Caja';
 import ArqueoDiario from './pages/ArqueoDiario';
 import Usuarios from './pages/Usuarios';
 import Configuracion from './pages/Configuracion';
+import Facturacion from './pages/Facturacion';
 
 // Componente para proteger las rutas
 const ProtectedRoute = ({ children }) => {
@@ -51,6 +52,7 @@ function App() {
               <Route index element={<VentasList />} />
               <Route path="nueva" element={<PuntoVenta />} />
             </Route>
+            <Route path="facturacion" element={<Facturacion />} />
             <Route path="inventario">
               <Route index element={<StockList key="todas" />} />
               <Route path="nuevo" element={<GestionRoute><StockForm /></GestionRoute>} />
@@ -58,6 +60,8 @@ function App() {
             </Route>
             <Route path="relojes" element={<StockList key="relojes" defaultCategory="Relojes" />} />
             <Route path="joyas" element={<StockList key="joyas" defaultCategory="Joyas" />} />
+            <Route path="plateria" element={<StockList key="plateria" defaultCategory="Platería" />} />
+            <Route path="acero" element={<StockList key="acero" defaultCategory="Acero" />} />
             <Route path="egresos">
               <Route index element={<EgresosList />} />
               <Route path="nuevo" element={<GestionRoute><EgresoForm /></GestionRoute>} />

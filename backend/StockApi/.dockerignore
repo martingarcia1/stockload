@@ -6,3 +6,5 @@ obj/
 
 # Secretos locales: en Docker se pasan por variables de entorno (.env)
 appsettings.Local.json
+# El certificado de ARCA no va dentro de la imagen: se monta como volumen o va por variables de entorno
+arca/

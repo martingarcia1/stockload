@@ -10,6 +10,8 @@ import {
     ESTADOS_FACTURA, formatFechaHora, formatMoney, hoyISO, labelMedioPago, leerError, letraComprobante
 } from '../utils/format';
 import { imprimirComprobante } from '../utils/comprobante';
+import FacturarModal from '../components/FacturarModal';
+import ComprobanteModal from '../components/ComprobanteModal';
 
 const EstadoFactura = ({ venta }) => {
     if (venta.anulada) return <span className="px-2 py-0.5 rounded text-xs bg-red-500/10 text-red-400">Anulada</span>;
@@ -23,14 +25,13 @@ const DetalleVenta = ({ venta, config, esGestion, onClose, onActualizada }) => {
     const [error, setError] = useState('');
     const [motivoAnulacion, setMotivoAnulacion] = useState('');
     const [confirmandoAnular, setConfirmandoAnular] = useState(false);
+    const [facturando, setFacturando] = useState(false);
+    const [verFactura, setVerFactura] = useState(null); // { comprobante } | { ventaId }
     const m = venta.moneda;
 
-    const facturar = async () => {
-        setAccion('facturar'); setError('');
-        const res = await apiFetch(`${API_URL}/ventas/${venta.id}/facturar`, { method: 'POST' });
-        setAccion('');
+    const recargar = async () => {
+        const res = await apiFetch(`${API_URL}/ventas/${venta.id}`);
         if (res.ok) onActualizada(await res.json());
-        else setError(await leerError(res));
     };
 
     const anular = async () => {
@@ -131,12 +132,28 @@ const DetalleVenta = ({ venta, config, esGestion, onClose, onActualizada }) => {
                     {esGestion && !venta.anulada && venta.facturaEstado !== 'Emitida' && !confirmandoAnular && (
                         <Button variant="danger" size="sm" onClick={() => setConfirmandoAnular(true)} className="gap-1"><Ban size={14} /> Anular</Button>
                     )}
-                    {esGestion && !venta.anulada && (venta.facturaEstado === 'Pendiente' || venta.facturaEstado === 'Error') && (
-                        <Button variant="outline" size="sm" onClick={facturar} isLoading={accion === 'facturar'} className="gap-1"><FileText size={14} /> Reintentar factura</Button>
+                    {!venta.anulada && venta.facturaEstado !== 'Emitida' && (
+                        <Button variant="outline" size="sm" onClick={() => setFacturando(true)} className="gap-1"><FileText size={14} /> Facturar</Button>
                     )}
-                    <Button size="sm" onClick={() => imprimirComprobante(venta, config)} className="gap-1"><Printer size={14} /> Imprimir</Button>
+                    {venta.facturaEstado === 'Emitida' ? (
+                        <Button size="sm" onClick={() => setVerFactura({ ventaId: venta.id })} className="gap-1"><FileText size={14} /> Ver factura</Button>
+                    ) : (
+                        <Button size="sm" onClick={() => imprimirComprobante(venta, config)} className="gap-1"><Printer size={14} /> Ticket sin factura</Button>
+                    )}
                 </div>
             </div>
+
+            {facturando && (
+                <div onClick={e => e.stopPropagation()}>
+                    <FacturarModal venta={venta} onClose={() => setFacturando(false)}
+                        onFacturada={(c) => { setFacturando(false); setVerFactura({ comprobante: c }); recargar(); }} />
+                </div>
+            )}
+            {verFactura && (
+                <div onClick={e => e.stopPropagation()}>
+                    <ComprobanteModal {...verFactura} onClose={() => setVerFactura(null)} />
+                </div>
+            )}
         </div>
     );
 };

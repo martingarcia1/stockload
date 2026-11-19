@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard, Package, Tag, Watch, UserCircle, LogOut, ShoppingCart,
-    ShoppingBag, Receipt, Wallet, ClipboardList, Users, Settings, DollarSign
+    ShoppingBag, Receipt, Wallet, ClipboardList, Users, Settings, DollarSign, FileText
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import useCotizacion from '../hooks/useCotizacion';
@@ -24,6 +24,7 @@ const Sidebar = () => {
                 { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
                 { name: 'Nueva Venta', icon: ShoppingBag, path: '/ventas/nueva' },
                 { name: 'Ventas', icon: Receipt, path: '/ventas', end: true },
+                { name: 'Facturación', icon: FileText, path: '/facturacion' },
             ]
         },
         {
@@ -32,6 +33,8 @@ const Sidebar = () => {
                 { name: 'Inventario', icon: Package, path: '/inventario' },
                 { name: 'Relojes', icon: Watch, path: '/relojes' },
                 { name: 'Joyas', icon: Tag, path: '/joyas' },
+                { name: 'Platería', icon: Tag, path: '/plateria' },
+                { name: 'Acero', icon: Tag, path: '/acero' },
                 { name: 'Egresos de Stock', icon: ShoppingCart, path: '/egresos' },
             ]
         },

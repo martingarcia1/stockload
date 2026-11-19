@@ -48,8 +48,6 @@ const Configuracion = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 ...c,
-                puntoVenta: Number(c.puntoVenta),
-                alicuotaIva: Number(c.alicuotaIva),
                 cotizacionManual: c.cotizacionManual === '' || c.cotizacionManual == null ? null : Number(c.cotizacionManual),
                 inicioActividades: c.inicioActividades || null
             })
@@ -71,7 +69,7 @@ const Configuracion = () => {
             <div className="flex items-end justify-between flex-wrap gap-4">
                 <div>
                     <h2 className="text-3xl font-display font-bold text-jewelry-light tracking-tight">Configuración</h2>
-                    <p className="text-jewelry-light/60 mt-1">Datos fiscales para ARCA y cotización del dólar.</p>
+                    <p className="text-jewelry-light/60 mt-1">Cotización del dólar. Los datos fiscales están en Facturación › Datos fiscales.</p>
                 </div>
                 <Button onClick={guardar} isLoading={saving} className="gap-2"><Save size={16} /> Guardar</Button>
             </div>
@@ -106,62 +104,6 @@ const Configuracion = () => {
                         {cotizacion
                             ? <><span className="text-jewelry-gold font-semibold">{formatMoney(cotizacion.valor)}</span> ({cotizacion.fuente}{cotizacion.actualizada && `, ${formatFechaHora(cotizacion.actualizada)}`})</>
                             : <span className="text-red-400">no disponible</span>}
-                    </div>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-lg">Datos fiscales</CardTitle>
-                    <CardDescription>Aparecen en los comprobantes y determinan el tipo de factura (A/B si es Responsable Inscripto, C si es Monotributo).</CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Campo label="Razón social"><input className={fieldClass} value={c.razonSocial || ''} onChange={e => set('razonSocial', e.target.value)} /></Campo>
-                    <Campo label="CUIT"><input className={fieldClass} value={c.cuit || ''} onChange={e => set('cuit', e.target.value)} placeholder="20123456789" /></Campo>
-                    <Campo label="Condición frente al IVA">
-                        <select className={fieldClass} value={c.condicionFiscal} onChange={e => set('condicionFiscal', e.target.value)}>
-                            <option value="ResponsableInscripto">Responsable Inscripto</option>
-                            <option value="Monotributo">Monotributo</option>
-                            <option value="Exento">Exento</option>
-                        </select>
-                    </Campo>
-                    <Campo label="Alícuota de IVA (%)" ayuda="Sólo aplica a Responsable Inscripto.">
-                        <input type="number" step="0.5" className={fieldClass} value={c.alicuotaIva} onChange={e => set('alicuotaIva', e.target.value)} disabled={c.condicionFiscal !== 'ResponsableInscripto'} />
-                    </Campo>
-                    <Campo label="Domicilio comercial"><input className={fieldClass} value={c.domicilioComercial || ''} onChange={e => set('domicilioComercial', e.target.value)} /></Campo>
-                    <Campo label="Ingresos Brutos"><input className={fieldClass} value={c.ingresosBrutos || ''} onChange={e => set('ingresosBrutos', e.target.value)} /></Campo>
-                    <Campo label="Inicio de actividades">
-                        <input type="date" className={fieldClass} value={c.inicioActividades ? c.inicioActividades.slice(0, 10) : ''} onChange={e => set('inicioActividades', e.target.value)} />
-                    </Campo>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-lg">Factura electrónica ARCA</CardTitle>
-                    <CardDescription>
-                        Para emitir comprobantes hace falta: (1) dar de alta un punto de venta tipo "Web Service" en ARCA,
-                        (2) generar el certificado digital con la clave fiscal del titular y asociarlo al servicio "wsfe".
-                        Mientras no esté conectado, las ventas a facturar quedan como "Pendiente ARCA" y se pueden emitir después.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Campo label="Punto de venta"><input type="number" min="1" className={fieldClass} value={c.puntoVenta} onChange={e => set('puntoVenta', e.target.value)} /></Campo>
-                    <Campo label="Ambiente">
-                        <select className={fieldClass} value={c.arcaAmbiente} onChange={e => set('arcaAmbiente', e.target.value)}>
-                            <option value="Homologacion">Homologación (pruebas)</option>
-                            <option value="Produccion">Producción</option>
-                        </select>
-                    </Campo>
-                    <div className="space-y-2 pt-6">
-                        <label className="flex items-center gap-2 text-sm text-jewelry-light">
-                            <input type="checkbox" className="accent-jewelry-gold" checked={c.arcaHabilitado} onChange={e => set('arcaHabilitado', e.target.checked)} />
-                            Enviar facturas a ARCA
-                        </label>
-                        <label className="flex items-center gap-2 text-sm text-jewelry-light">
-                            <input type="checkbox" className="accent-jewelry-gold" checked={c.facturarPorDefecto} onChange={e => set('facturarPorDefecto', e.target.checked)} />
-                            Facturar todas las ventas por defecto
-                        </label>
                     </div>
                 </CardContent>
             </Card>

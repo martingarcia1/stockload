@@ -18,6 +18,9 @@ namespace StockApi.Data
         public DbSet<CajaSesion> CajaSesiones { get; set; }
         public DbSet<MovimientoCaja> MovimientosCaja { get; set; }
         public DbSet<Arqueo> Arqueos { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Factura> Facturas { get; set; }
+        public DbSet<ArcaTicket> ArcaTickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,6 +54,20 @@ namespace StockApi.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CajaSesion>().HasIndex(c => c.Abierta);
+
+            // ---------- Facturación ARCA ----------
+            modelBuilder.Entity<Cliente>().HasIndex(c => new { c.DocTipo, c.DocNro }).IsUnique();
+
+            // El número es único por entorno + tipo + punto de venta (pruebas y producción no se mezclan)
+            modelBuilder.Entity<Factura>()
+                .HasIndex(f => new { f.Entorno, f.Tipo, f.PuntoVenta, f.Numero }).IsUnique();
+            modelBuilder.Entity<Factura>().HasIndex(f => f.Fecha);
+            modelBuilder.Entity<Factura>().HasIndex(f => f.VentaId);
+            modelBuilder.Entity<Factura>()
+                .HasOne(f => f.Venta)
+                .WithMany()
+                .HasForeignKey(f => f.VentaId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -14,13 +14,11 @@ namespace StockApi.Controllers
     {
         private readonly AppDbContext _context;
         private readonly CotizacionService _cotizacion;
-        private readonly IFacturacionService _facturacion;
 
-        public VentasController(AppDbContext context, CotizacionService cotizacion, IFacturacionService facturacion)
+        public VentasController(AppDbContext context, CotizacionService cotizacion)
         {
             _context = context;
             _cotizacion = cotizacion;
-            _facturacion = facturacion;
         }
 
         // GET: api/Ventas?desde=2026-11-01&hasta=2026-11-04&page=1&pageSize=20&usuario=&facturaEstado=
@@ -166,16 +164,7 @@ namespace StockApi.Controllers
             if ((venta.DescuentoGeneral > 0 && string.IsNullOrWhiteSpace(venta.DescuentoMotivo)) || sinMotivo)
                 return BadRequest(new { message = "Indique el motivo del descuento (ej. \"Pago contado efectivo\")." });
 
-            // ---------- Facturación ----------
-            DatosComprobante? comprobante = null;
-            if (req.Facturar)
-            {
-                var config = await ConfiguracionService.ObtenerAsync(_context);
-                var (datos, error) = ReglasFiscales.ArmarComprobante(venta, config);
-                if (error != null) return BadRequest(new { message = error });
-                comprobante = datos;
-                venta.FacturaEstado = EstadosFactura.Pendiente;
-            }
+            // La factura (ARCA) se emite aparte, con "Facturar esta venta": api/facturacion/ventas/{id}/facturar
 
             // ---------- Persistencia (venta + stock en una transacción) ----------
             using var tx = await _context.Database.BeginTransactionAsync();
@@ -187,32 +176,7 @@ namespace StockApi.Controllers
             await _context.SaveChangesAsync();
             await tx.CommitAsync();
 
-            // La emisión en ARCA se hace después de guardar: si falla, la venta queda registrada
-            // y la factura en estado Pendiente/Error para reintentar.
-            if (comprobante != null)
-            {
-                await EmitirFacturaAsync(venta, comprobante);
-            }
-
             return CreatedAtAction(nameof(GetVenta), new { id = venta.Id }, venta);
-        }
-
-        // POST: api/Ventas/5/facturar  -> reintenta la emisión de una factura pendiente o con error
-        [HttpPost("{id}/facturar")]
-        [Authorize(Roles = Roles.Gestion)]
-        public async Task<ActionResult<Venta>> Facturar(int id)
-        {
-            var venta = await _context.Ventas.Include(v => v.Items).FirstOrDefaultAsync(v => v.Id == id);
-            if (venta == null) return NotFound();
-            if (venta.Anulada) return BadRequest(new { message = "La venta está anulada." });
-            if (venta.FacturaEstado == EstadosFactura.Emitida) return BadRequest(new { message = "La venta ya fue facturada." });
-
-            var config = await ConfiguracionService.ObtenerAsync(_context);
-            var (datos, error) = ReglasFiscales.ArmarComprobante(venta, config);
-            if (error != null) return BadRequest(new { message = error });
-
-            await EmitirFacturaAsync(venta, datos!);
-            return venta;
         }
 
         // POST: api/Ventas/5/anular
@@ -225,7 +189,7 @@ namespace StockApi.Controllers
             if (venta == null) return NotFound();
             if (venta.Anulada) return BadRequest(new { message = "La venta ya está anulada." });
             if (venta.FacturaEstado == EstadosFactura.Emitida)
-                return BadRequest(new { message = "La venta tiene factura emitida en ARCA: debe anularse con una Nota de Crédito." });
+                return BadRequest(new { message = "La venta tiene factura emitida: primero anule la factura (Facturación > Anular), que emite la nota de crédito." });
             if (venta.CajaSesion is { Abierta: false })
                 return BadRequest(new { message = "La caja de esta venta ya fue cerrada. Registre la devolución como movimiento de caja." });
 
@@ -248,26 +212,6 @@ namespace StockApi.Controllers
             await _context.SaveChangesAsync();
             await tx.CommitAsync();
             return venta;
-        }
-
-        private async Task EmitirFacturaAsync(Venta venta, DatosComprobante datos)
-        {
-            var config = await ConfiguracionService.ObtenerAsync(_context);
-            ResultadoFacturacion resultado;
-
-            if (!config.ArcaHabilitado)
-            {
-                resultado = new ResultadoFacturacion(false, EstadosFactura.Pendiente,
-                    Error: "Facturación ARCA deshabilitada en Configuración. Comprobante pendiente de emisión.");
-            }
-            else
-            {
-                try { resultado = await _facturacion.EmitirAsync(datos, config); }
-                catch (Exception ex) { resultado = new ResultadoFacturacion(false, EstadosFactura.Error, Error: ex.Message); }
-            }
-
-            ReglasFiscales.Aplicar(venta, datos, resultado);
-            await _context.SaveChangesAsync();
         }
     }
 }

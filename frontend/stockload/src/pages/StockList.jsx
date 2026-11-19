@@ -242,6 +242,7 @@ const StockList = ({ defaultCategory = 'Todas' }) => {
                                             <option value="Relojes">Relojes</option>
                                             <option value="Joyas">Joyas</option>
                                             <option value="Platería">Platería</option>
+                                            <option value="Acero">Acero</option>
                                             <option value="General">General</option>
                                         </select>
                                     </div>

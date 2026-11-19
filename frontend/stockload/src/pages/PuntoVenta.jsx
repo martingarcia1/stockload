@@ -1,22 +1,17 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
-import { AlertTriangle, CheckCircle2, Loader2, Minus, Plus, Printer, ShoppingBag, Trash2, Wallet } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, FileText, Loader2, Minus, Plus, Printer, ShoppingBag, Trash2, Wallet } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import Button from '../components/Button';
+import FacturarModal from '../components/FacturarModal';
+import ComprobanteModal from '../components/ComprobanteModal';
 import { selectStyles, fieldClass, labelClass } from '../components/selectStyles';
 import { apiFetch, API_URL } from '../utils/api';
 import useCotizacion from '../hooks/useCotizacion';
 import { useAuth } from '../context/AuthContext';
-import { convertir, formatMoney, leerError, MEDIOS_PAGO, round2, letraComprobante } from '../utils/format';
+import { convertir, formatMoney, leerError, MEDIOS_PAGO, round2 } from '../utils/format';
 import { imprimirComprobante } from '../utils/comprobante';
-
-const CONDICIONES_IVA = [
-    { value: 'ConsumidorFinal', label: 'Consumidor Final' },
-    { value: 'ResponsableInscripto', label: 'Responsable Inscripto' },
-    { value: 'Monotributo', label: 'Monotributista' },
-    { value: 'Exento', label: 'Exento' },
-];
 
 const MOTIVOS_RAPIDOS = ['Pago contado efectivo', 'Cliente frecuente', 'Promoción', 'Producto con detalle'];
 
@@ -100,13 +95,14 @@ const PuntoVenta = () => {
     const [medioPago, setMedioPago] = useState('Efectivo');
     const [descuentoGeneral, setDescuentoGeneral] = useState('');
     const [descuentoMotivo, setDescuentoMotivo] = useState('');
-    const [facturar, setFacturar] = useState(true);
-    const [cliente, setCliente] = useState({ nombre: '', docTipo: 'DNI', docNro: '', condicionIva: 'ConsumidorFinal' });
     const [observaciones, setObservaciones] = useState('');
 
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [ventaCreada, setVentaCreada] = useState(null);
+    const [facturando, setFacturando] = useState(false);
+    const [factura, setFactura] = useState(null);     // comprobante emitido para la venta creada
+    const [viendoFactura, setViendoFactura] = useState(false);
 
     const cargarCaja = useCallback(async () => {
         const res = await apiFetch(`${API_URL}/caja/actual`);
@@ -130,11 +126,7 @@ const PuntoVenta = () => {
         cargarCaja();
         cargarProductos();
         apiFetch(`${API_URL}/configuracion/publica`).then(async r => {
-            if (r.ok) {
-                const c = await r.json();
-                setConfig(c);
-                setFacturar(c.facturarPorDefecto);
-            }
+            if (r.ok) setConfig(await r.json());
         });
     }, [cargarCaja, cargarProductos]);
 
@@ -193,16 +185,18 @@ const PuntoVenta = () => {
         setLineas([]);
         setDescuentoGeneral('');
         setDescuentoMotivo('');
-        setCliente({ nombre: '', docTipo: 'DNI', docNro: '', condicionIva: 'ConsumidorFinal' });
         setObservaciones('');
-        setFacturar(config?.facturarPorDefecto ?? true);
         setError('');
     };
 
-    // ---------- Validación y envío ----------
-    const necesitaCuit = facturar && config?.condicionFiscal === 'ResponsableInscripto'
-        && (cliente.condicionIva === 'ResponsableInscripto' || cliente.condicionIva === 'Monotributo');
+    const nuevaVenta = () => {
+        setVentaCreada(null);
+        setFactura(null);
+        setFacturando(false);
+        setViendoFactura(false);
+    };
 
+    // ---------- Validación y envío ----------
     const confirmar = async () => {
         setError('');
         if (lineas.length === 0) return setError('Agregue al menos un producto.');
@@ -212,9 +206,6 @@ const PuntoVenta = () => {
         const lineasSinMotivo = calculadas.some(l => l.descuento > 0 && !l.motivo.trim());
         if ((descGeneral > 0 || lineasSinMotivo) && !descuentoMotivo.trim()) {
             return setError('Indique el motivo del descuento (queda registrado quién lo aplicó y por qué).');
-        }
-        if (necesitaCuit && cliente.docNro.replace(/\D/g, '').length !== 11) {
-            return setError('Para Factura A ingrese el CUIT del cliente (11 dígitos).');
         }
 
         setSaving(true);
@@ -230,11 +221,6 @@ const PuntoVenta = () => {
                 medioPago,
                 descuentoGeneral: descGeneral,
                 descuentoMotivo: descuentoMotivo || null,
-                facturar,
-                clienteNombre: cliente.nombre || null,
-                clienteDocTipo: necesitaCuit ? 'CUIT' : cliente.docTipo,
-                clienteDocNro: cliente.docNro || null,
-                clienteCondicionIva: cliente.condicionIva,
                 observaciones: observaciones || null
             };
             const res = await apiFetch(`${API_URL}/ventas`, {
@@ -276,24 +262,42 @@ const PuntoVenta = () => {
                         {v.descuento > 0 && (
                             <p className="text-sm text-jewelry-light/60">Incluye descuento de {formatMoney(v.descuento, v.moneda)}</p>
                         )}
-                        {v.facturaEstado === 'Emitida' && (
-                            <p className="text-sm text-emerald-400">Factura {letraComprobante(v.tipoComprobante)} emitida — CAE {v.cae}</p>
+                        {factura ? (
+                            <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3 text-sm text-emerald-400">
+                                {factura.tipoNombre} {factura.numeroFormateado} emitida · CAE {factura.cae}{factura.esPrueba && ' (prueba)'}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-jewelry-light/60">¿El cliente necesita factura? Emitila ahora o más tarde desde Ventas.</p>
                         )}
-                        {(v.facturaEstado === 'Pendiente' || v.facturaEstado === 'Error') && (
-                            <p className="text-sm text-amber-400">
-                                Factura {letraComprobante(v.tipoComprobante)} pendiente de emisión en ARCA. {v.facturaError}
-                            </p>
-                        )}
-                        <div className="flex justify-center gap-3 pt-4">
-                            <Button variant="outline" onClick={() => imprimirComprobante(v, config || {})} className="gap-2">
-                                <Printer size={16} /> Imprimir comprobante
-                            </Button>
-                            <Button onClick={() => setVentaCreada(null)} className="gap-2">
+                        <div className="flex flex-wrap justify-center gap-3 pt-4">
+                            {factura ? (
+                                <Button onClick={() => setViendoFactura(true)} className="gap-2">
+                                    <FileText size={16} /> Ver factura
+                                </Button>
+                            ) : (
+                                <Button onClick={() => setFacturando(true)} className="gap-2">
+                                    <FileText size={16} /> Facturar esta venta
+                                </Button>
+                            )}
+                            {!factura && (
+                                <Button variant="outline" onClick={() => imprimirComprobante(v, config || {})} className="gap-2">
+                                    <Printer size={16} /> Ticket sin factura
+                                </Button>
+                            )}
+                            <Button variant="secondary" onClick={nuevaVenta} className="gap-2">
                                 <ShoppingBag size={16} /> Nueva venta
                             </Button>
                         </div>
                     </CardContent>
                 </Card>
+
+                {facturando && (
+                    <FacturarModal venta={v} onClose={() => setFacturando(false)}
+                        onFacturada={(c) => { setFactura(c); setFacturando(false); setViendoFactura(true); }} />
+                )}
+                {viendoFactura && factura && (
+                    <ComprobanteModal comprobante={factura} onClose={() => setViendoFactura(false)} />
+                )}
             </div>
         );
     }
@@ -441,33 +445,6 @@ const PuntoVenta = () => {
                                 <label className={labelClass}>Motivo</label>
                                 <input className={fieldClass} value={descuentoMotivo} onChange={e => setDescuentoMotivo(e.target.value)} placeholder="Ej. Pago contado efectivo" list="motivos-descuento" />
                             </div>
-                        </div>
-
-                        <div className="rounded-lg border border-jewelry-gray p-3 space-y-3">
-                            <label className="flex items-center gap-2 text-sm text-jewelry-light cursor-pointer">
-                                <input type="checkbox" checked={facturar} onChange={e => setFacturar(e.target.checked)} className="accent-jewelry-gold" />
-                                Emitir factura electrónica (ARCA)
-                            </label>
-                            {facturar && (
-                                <>
-                                    <select className={fieldClass} value={cliente.condicionIva} onChange={e => setCliente({ ...cliente, condicionIva: e.target.value })}>
-                                        {CONDICIONES_IVA.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-                                    </select>
-                                    <div className="grid grid-cols-[90px_1fr] gap-2">
-                                        <select className={fieldClass} value={necesitaCuit ? 'CUIT' : cliente.docTipo} disabled={necesitaCuit}
-                                            onChange={e => setCliente({ ...cliente, docTipo: e.target.value })}>
-                                            <option value="DNI">DNI</option>
-                                            <option value="CUIT">CUIT</option>
-                                        </select>
-                                        <input className={fieldClass} value={cliente.docNro} onChange={e => setCliente({ ...cliente, docNro: e.target.value })}
-                                            placeholder={necesitaCuit ? 'CUIT (obligatorio)' : 'Opcional'} />
-                                    </div>
-                                    <input className={fieldClass} value={cliente.nombre} onChange={e => setCliente({ ...cliente, nombre: e.target.value })} placeholder="Nombre / Razón social (opcional)" />
-                                    {config && !config.arcaHabilitado && (
-                                        <p className="text-xs text-amber-400/80">ARCA aún no está conectado: la factura quedará pendiente de emisión.</p>
-                                    )}
-                                </>
-                            )}
                         </div>
 
                         <input className={fieldClass} value={observaciones} onChange={e => setObservaciones(e.target.value)} placeholder="Observaciones (opcional)" />
